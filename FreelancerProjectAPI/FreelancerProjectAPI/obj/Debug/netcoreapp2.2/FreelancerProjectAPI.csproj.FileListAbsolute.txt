@@ -1,0 +1,16 @@
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\appsettings.Development.json
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\appsettings.json
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\Properties\launchSettings.json
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.deps.json
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.runtimeconfig.json
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.runtimeconfig.dev.json
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.dll
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.csprojAssemblyReference.cache
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.RazorAssemblyInfo.cache
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.RazorAssemblyInfo.cs
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.AssemblyInfoInputs.cache
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.AssemblyInfo.cs
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.RazorTargetAssemblyInfo.cache
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.pdb
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.dll
+C:\Users\jeffv\Desktop\FreelancerProject\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.pdb
