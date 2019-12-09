@@ -101,5 +101,19 @@ namespace FreelancerProjectAPI.Controllers
         {
             return _context.Companies.Any(e => e.CompanyID == id);
         }
-    }
+
+		[HttpGet("ByUser")]
+		public async Task<ActionResult<IEnumerable<Company>>> FindCompanyByUser(int userID)
+		{
+			var usercompanies = _context.UserCompanies.Where(u => u.User.UserID == userID);
+			List<Company> companies = new List<Company>();
+			foreach (var uc in usercompanies)
+			{
+				_context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID);
+
+			}
+			return companies;
+
+		}
+	}
 }

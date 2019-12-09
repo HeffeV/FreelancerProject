@@ -19,7 +19,7 @@ namespace FreelancerProjectAPI.Models
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Assignment> Assignments {get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<UserCompany> UserCompanys { get; set; }
+        public DbSet<UserCompany> UserCompanies { get; set; }
         public DbSet<Company> Companies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
