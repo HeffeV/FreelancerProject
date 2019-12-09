@@ -11,5 +11,9 @@
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_DbContextTypeFullName>FreelancerProjectAPI.Models.DatabaseContext</WebStackScaffolding_DbContextTypeFullName>
     <NameOfLastUsedPublishProfile>FreelancerProjectAPI - Web Deploy</NameOfLastUsedPublishProfile>
+    <ActiveDebugProfile>FreelancerProjectAPI</ActiveDebugProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

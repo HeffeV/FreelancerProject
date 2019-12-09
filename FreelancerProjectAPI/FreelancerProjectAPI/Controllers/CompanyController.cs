@@ -31,7 +31,13 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Company>> GetCompany(long id)
         {
-            var company = await _context.Companies.FindAsync(id);
+            var company = await _context.Companies
+                .Include(c=> c.Assignments)
+                .Include(c=> c.ContactInfo)
+                .Include(c=> c.Location)
+                .Include(c=> c.Reviews)
+                .Include(c=> c.UserCompanies).ThenInclude(uc=> uc.User)
+                .FirstOrDefaultAsync(c=>c.CompanyID == id);
 
             if (company == null)
             {
