@@ -114,13 +114,17 @@ namespace FreelancerProjectAPI.Controllers
         }
 
 		[HttpGet("ByUser")]
-		public async Task<ActionResult<IEnumerable<Company>>> FindCompanyByUser(int userID)
+		public ActionResult<IEnumerable<Company>> FindCompanyByUser(int userID)
 		{
-			var usercompanies = _context.UserCompanies.Where(u => u.User.UserID == userID);
+			var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID);
 			List<Company> companies = new List<Company>();
 			foreach (var uc in usercompanies)
 			{
-				companies.Add(_context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
+				var found = _context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID);
+				if (found != null)
+				{
+					companies.Add(_context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
+				}
 			}
 			return companies;
 
