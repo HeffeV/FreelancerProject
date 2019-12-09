@@ -137,7 +137,7 @@ namespace FreelancerProjectAPI.Models
             Assignment assignment = new Assignment()
             {
                 Description = "This is a test description",
-                AssingmentName = "TestAssignment",
+                AssignmentName = "TestAssignment",
                 Location = new Location()
                 {
                     Country = "France",
