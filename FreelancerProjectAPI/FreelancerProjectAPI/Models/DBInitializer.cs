@@ -15,6 +15,34 @@ namespace FreelancerProjectAPI.Models
                 return;   // DB has been seeded
             }
 
+            Status status = new Status()
+            {
+                CurrentStatus = "Draft"
+            };
+
+            context.Status.Add(status);
+
+            status = new Status()
+            {
+                CurrentStatus = "Finished"
+            };
+
+            context.Status.Add(status);
+
+            status = new Status()
+            {
+                CurrentStatus = "Closed"
+            };
+
+            context.Status.Add(status);
+
+            status = new Status()
+            {
+                CurrentStatus = "Open"
+            };
+
+            context.Status.Add(status);
+
             UserType userType = new UserType()
             {
                 Type = "user"
@@ -141,6 +169,7 @@ namespace FreelancerProjectAPI.Models
                 };
 
 
+
             Assignment assignment = new Assignment()
             {
                 Description = "This is a test description",
@@ -152,7 +181,6 @@ namespace FreelancerProjectAPI.Models
                     Address = "Teststreet 12893"
                 },
                 Company = company,
-                User=user,
                 Tags = new List<Tag>
                 {
                     new Tag()
@@ -160,10 +188,19 @@ namespace FreelancerProjectAPI.Models
                         TagName="TestTag"
                     }
                 }
-                ,Status="progress"
+                ,Status=status
             };
 
-            user.Assignments= new List<Assignment>() { assignment };
+            UserAssignment ua = new UserAssignment()
+            {
+                User = user,
+                Accepted = false,
+                Assignment = assignment
+            };
+            assignment.UserAssignments = new List<UserAssignment>();
+            assignment.UserAssignments.Add(ua);
+
+            user.UserAssignments= new List<UserAssignment>() { ua };
             company.Assignments = new List<Assignment>() { assignment };
 
             user.UserCompanies = new List<UserCompany>() { userCompany };

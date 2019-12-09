@@ -25,7 +25,7 @@ namespace FreelancerProjectAPI.Models
         public ContactInfo ContactInfo { get; set; }
         public ICollection<UserCompany> UserCompanies {get;set;}
         public ICollection<Tag> Tags { get; set; }
-        public ICollection<Assignment> Assignments { get; set; }
+        public ICollection<UserAssignment> UserAssignments { get; set; }
         public Location Location { get; set; }
     }
 }
