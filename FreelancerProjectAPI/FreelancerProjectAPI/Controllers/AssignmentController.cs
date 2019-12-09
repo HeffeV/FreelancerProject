@@ -126,5 +126,26 @@ namespace FreelancerProjectAPI.Controllers
 
 			return assignment;
 		}
-	}
+        [HttpGet]
+        [Route("getRandoms")]
+        public async Task<ActionResult<IEnumerable<Assignment>>> GetRandomAssignments()
+        {
+            var allAssignments = await _context.Assignments.ToListAsync();
+            List<Assignment> assignments = new List<Assignment>();
+            Random r = new Random();
+            if (allAssignments.Count > 0)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    assignments.Add(allAssignments[r.Next(0, allAssignments.Count)]);
+                }
+            }
+            else
+            {
+                NotFound();
+            }
+
+            return assignments;
+        }
+    }
 }

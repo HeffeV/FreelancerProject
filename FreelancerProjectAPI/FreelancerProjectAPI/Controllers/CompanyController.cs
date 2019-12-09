@@ -135,5 +135,27 @@ namespace FreelancerProjectAPI.Controllers
 			return companies;
 
 		}
-	}
+
+        [HttpGet]
+        [Route("getRandoms")]
+        public async Task<ActionResult<IEnumerable<Company>>> GetRandomCompanies()
+        {
+            var allCompanies = await _context.Companies.ToListAsync();
+            List<Company> companies = new List<Company>();
+            Random r = new Random();
+            if (allCompanies.Count > 0)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    companies.Add(allCompanies[r.Next(0, allCompanies.Count)]);
+                }
+            }
+            else
+            {
+                NotFound();
+            }
+
+            return companies;
+        }
+    }
 }
