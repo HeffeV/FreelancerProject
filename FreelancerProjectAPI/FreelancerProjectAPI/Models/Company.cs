@@ -11,6 +11,7 @@ namespace FreelancerProjectAPI.Models
         public ICollection<UserCompany> UserCompanies{get;set;}
         public ICollection<Review> Reviews { get; set; }
         public ICollection<Assignment> Assignments { get; set; }
+        public ICollection<Tag> Tags { get; set; }
         public Location Location { get; set; }
         public string CompanyName { get; set; }
         public ContactInfo ContactInfo { get; set; }
