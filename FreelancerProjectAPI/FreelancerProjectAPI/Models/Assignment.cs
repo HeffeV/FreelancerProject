@@ -13,7 +13,7 @@ namespace FreelancerProjectAPI.Models
         public string AssignmentName { get; set; }
         public Location Location { get; set; }
         public Company Company { get; set; }
-        public User User { get; set; }
+        public UserAssignment UserAssignment { get; set; }
         public string Status { get; set; }
     }
 }

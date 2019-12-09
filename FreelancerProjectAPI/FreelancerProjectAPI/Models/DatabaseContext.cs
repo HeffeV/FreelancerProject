@@ -21,6 +21,8 @@ namespace FreelancerProjectAPI.Models
         public DbSet<Location> Locations { get; set; }
         public DbSet<UserCompany> UserCompanies { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<Status> Status { get; set; }
+        public DbSet<UserAssignment> UserAssignments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +37,8 @@ namespace FreelancerProjectAPI.Models
             modelBuilder.Entity<Location>().ToTable("Location");
             modelBuilder.Entity<UserCompany>().ToTable("UserCompany");
             modelBuilder.Entity<Company>().ToTable("Company");
+            modelBuilder.Entity<Status>().ToTable("Status");
+            modelBuilder.Entity<UserAssignment>().ToTable("UserAssignment");
         }
     }
 }
