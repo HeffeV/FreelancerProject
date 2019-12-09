@@ -14,5 +14,6 @@ namespace FreelancerProjectAPI.Models
         public Location Location { get; set; }
         public Company Company { get; set; }
         public User User { get; set; }
+        public string Status { get; set; }
     }
 }

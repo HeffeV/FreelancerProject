@@ -24,6 +24,13 @@ namespace FreelancerProjectAPI.Models
 
             userType = new UserType()
             {
+                Type = "recruiter"
+            };
+
+            context.UserTypes.Add(userType);
+
+            userType = new UserType()
+            {
                 Type = "admin"
             };
 
@@ -153,6 +160,7 @@ namespace FreelancerProjectAPI.Models
                         TagName="TestTag"
                     }
                 }
+                ,Status="progress"
             };
 
             user.Assignments= new List<Assignment>() { assignment };
