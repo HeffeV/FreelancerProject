@@ -113,5 +113,18 @@ namespace FreelancerProjectAPI.Controllers
 		{
 			return await _context.Status.ToListAsync();
 		}
+		[HttpPut("PublishAssignment")]
+		public async Task<ActionResult<Assignment>>  PublishAssignment(long id)
+		{
+			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
+
+			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 2);
+			assignment.Status = status;
+
+			_context.Entry(assignment).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
+
+			return assignment;
+		}
 	}
 }
