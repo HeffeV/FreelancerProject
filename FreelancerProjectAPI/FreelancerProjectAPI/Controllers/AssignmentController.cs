@@ -88,7 +88,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Assignment>> DeleteAssignment(long id)
         {
-            var assignment = await _context.Assignments.FindAsync(id);
+            var assignment = await _context.Assignments.Include(a => a.Tags).Include(a => a.Company).Include(a => a.Status).FirstOrDefaultAsync(a=> a.AssignmentID == id);
             if (assignment == null)
             {
                 return NotFound();
