@@ -109,8 +109,7 @@ namespace FreelancerProjectAPI.Controllers
 			List<Company> companies = new List<Company>();
 			foreach (var uc in usercompanies)
 			{
-				_context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID);
-
+				companies.Add(_context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
 			}
 			return companies;
 
