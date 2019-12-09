@@ -73,8 +73,19 @@ namespace FreelancerProjectAPI.Controllers
 
         // POST: api/Company
         [HttpPost]
-        public async Task<ActionResult<Company>> PostCompany(Company company)
+        public async Task<ActionResult<Company>> PostCompany(long userid, Company company)
         {
+            User user = _context.Users.Find(userid);
+
+            UserCompany com = new UserCompany()
+            {
+                Company = company,
+                User = user
+            };
+
+            company.UserCompanies = new List<UserCompany>();
+            company.UserCompanies.Add(com);
+
             _context.Companies.Add(company);
             await _context.SaveChangesAsync();
 
