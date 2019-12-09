@@ -24,7 +24,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Assignment>>> GetAssignments()
         {
-            return await _context.Assignments.Include(a => a.Tags).Include(a => a.Company).ToListAsync();
+            return await _context.Assignments.Include(a => a.Tags).Include(a => a.Company).Include(a=>a.Status).ToListAsync();
         }
 
         // GET: api/Assignment/5
@@ -76,7 +76,10 @@ namespace FreelancerProjectAPI.Controllers
         public async Task<ActionResult<Assignment>> PostAssignment(Assignment assignment,int companyID)
         {
 			Company company = _context.Companies.FirstOrDefault(c => c.CompanyID == companyID);
+			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 1);
+
 			assignment.Company = company;
+			assignment.Status = status;
 
             _context.Assignments.Add(assignment);
             await _context.SaveChangesAsync();
@@ -104,5 +107,11 @@ namespace FreelancerProjectAPI.Controllers
         {
             return _context.Assignments.Any(e => e.AssignmentID == id);
         }
-    }
+
+		[HttpGet("PossibleStatus")]
+		public async Task<ActionResult<IEnumerable<Status>>> GetStatusses()
+		{
+			return await _context.Status.ToListAsync();
+		}
+	}
 }
