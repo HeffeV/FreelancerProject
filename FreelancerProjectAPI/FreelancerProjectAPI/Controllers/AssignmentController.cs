@@ -24,7 +24,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Assignment>>> GetAssignments()
         {
-            return await _context.Assignments.ToListAsync();
+            return await _context.Assignments.Include(a => a.Tags).Include(a => a.Company).ToListAsync();
         }
 
         // GET: api/Assignment/5
@@ -73,8 +73,11 @@ namespace FreelancerProjectAPI.Controllers
 
         // POST: api/Assignment
         [HttpPost]
-        public async Task<ActionResult<Assignment>> PostAssignment(Assignment assignment)
+        public async Task<ActionResult<Assignment>> PostAssignment(Assignment assignment,int companyID)
         {
+			Company company = _context.Companies.FirstOrDefault(c => c.CompanyID == companyID);
+			assignment.Company = company;
+
             _context.Assignments.Add(assignment);
             await _context.SaveChangesAsync();
 
