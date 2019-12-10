@@ -42,19 +42,19 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // PUT: api/Assignment/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAssignment(long id, Assignment assignment)
+        [HttpPut]
+        public async Task<IActionResult> PutAssignment(Assignment assignment)
         {
             Assignment tmpAssignment;
 
-            tmpAssignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefaultAsync(a => a.AssignmentID==id);
+            tmpAssignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefaultAsync(a => a.AssignmentID==assignment.AssignmentID);
 
             foreach(TagAssignment ta in assignment.TagAssignments)
             {
-                tmpAssignment.TagAssignments.Add(new TagAssignment() { TagAssignmentID=0,Tag=ta.Tag,Assignment=tmpAssignment});
+                tmpAssignment.TagAssignments.Add(new TagAssignment() { Tag=new Tag() { TagName=ta.Tag.TagName},Assignment=tmpAssignment});
             }
 
-            _context.Entry(assignment).State = EntityState.Modified;
+            _context.Entry(tmpAssignment).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
             return Ok();
