@@ -16,5 +16,6 @@ namespace FreelancerProjectAPI.Models
         public string CompanyName { get; set; }
         public ContactInfo ContactInfo { get; set; }
         public string About { get; set; }
+        public string Image { get; set; }
     }
 }

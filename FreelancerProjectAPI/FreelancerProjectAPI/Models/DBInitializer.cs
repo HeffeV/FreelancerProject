@@ -133,7 +133,7 @@ namespace FreelancerProjectAPI.Models
                     Country = "Germany",
                     Postcode = "GE1234",
                     Address = "Companystreet 123"
-                }
+                },Image=""
 
             };
 
@@ -191,7 +191,7 @@ namespace FreelancerProjectAPI.Models
                     Address = "Teststreet 12893"
                 },
                 Company = company
-                ,Status=status
+                ,Status=status,Image=""
             };
             assignment.TagAssignments = new List<TagAssignment>()
             {
