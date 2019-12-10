@@ -102,7 +102,7 @@ namespace FreelancerProjectAPI.Controllers
             return _context.Tags.Any(e => e.TagID == id);
         }
 
-		[HttpDelete("tagAssignment{id}")]
+		[HttpDelete("tagAssignment/{id}")]
 		public async Task<ActionResult<TagAssignment>> DeleteTagAssignment(long id)
 		{
 			var tagAssignment = await _context.TagAssignments.FindAsync(id);
