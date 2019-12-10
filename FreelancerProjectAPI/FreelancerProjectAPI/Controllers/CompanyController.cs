@@ -65,7 +65,11 @@ namespace FreelancerProjectAPI.Controllers
 
             foreach (TagCompany tc in company.TagCompanies)
             {
-                tmpCompany.TagCompanies.Add(new TagCompany() { Tag = new Tag() { TagName = tc.Tag.TagName }, Company = tmpCompany });
+                TagCompany tmpTagCompany = _context.TagCompanies.Include(t=>t.Tag).SingleOrDefault(t => t.Tag.TagName == tc.Tag.TagName && t.TagCompanyID == tc.TagCompanyID);
+                if (tmpTagCompany == null || tmpTagCompany.Equals(null))
+                {
+                    tmpCompany.TagCompanies.Add(new TagCompany() { Tag = new Tag() { TagName = tc.Tag.TagName }, Company = tmpCompany });
+                }
             }
 
             _context.Entry(tmpCompany).State = EntityState.Modified;
