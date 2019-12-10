@@ -51,7 +51,11 @@ namespace FreelancerProjectAPI.Controllers
 
             foreach(TagAssignment ta in assignment.TagAssignments)
             {
-                tmpAssignment.TagAssignments.Add(new TagAssignment() { Tag=new Tag() { TagName=ta.Tag.TagName},Assignment=tmpAssignment});
+                TagAssignment tmpTagAssignment = _context.TagAssignments.Include(t=>t.Tag).SingleOrDefault(t => t.Tag.TagName == ta.Tag.TagName&&t.TagAssignmentID==ta.TagAssignmentID);
+                if (tmpTagAssignment == null || tmpTagAssignment.Equals(null))
+                {
+                    tmpAssignment.TagAssignments.Add(new TagAssignment() { Tag = new Tag() { TagName = ta.Tag.TagName }, Assignment = tmpAssignment });
+                }
             }
 
             _context.Entry(tmpAssignment).State = EntityState.Modified;
