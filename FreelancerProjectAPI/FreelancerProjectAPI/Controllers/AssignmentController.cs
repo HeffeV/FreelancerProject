@@ -56,7 +56,7 @@ namespace FreelancerProjectAPI.Controllers
                 {
                     //tag is nog niet toegevoegd aan assignment
                     Tag tmpTag = _context.Tags.SingleOrDefault(t => t.TagName == ta.Tag.TagName);
-                    if (tmpTag == null || tmpTagAssignment.Equals(null))
+                    if (tmpTag == null || tmpTag.Equals(null))
                     {
                         //tag bestaat niet
                         tmpAssignment.TagAssignments.Add(new TagAssignment() { Tag = new Tag() { TagName = ta.Tag.TagName }, Assignment = tmpAssignment });
