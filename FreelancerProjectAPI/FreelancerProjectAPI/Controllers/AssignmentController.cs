@@ -209,6 +209,7 @@ namespace FreelancerProjectAPI.Controllers
                         }
                     }
                     allAssignments = tmpAssignments;
+                    tmpAssignments = new List<Assignment>();
                 }
             }
 
