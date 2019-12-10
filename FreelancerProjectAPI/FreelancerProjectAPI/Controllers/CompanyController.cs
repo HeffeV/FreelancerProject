@@ -49,13 +49,8 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // PUT: api/Company/5
-<<<<<<< HEAD
         [HttpPut]
         public async Task<IActionResult> PutCompany(Company company)
-=======
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Company>> PutCompany(long id, Company company)
->>>>>>> merge
         {
 
             Company tmpCompany;
@@ -88,15 +83,11 @@ namespace FreelancerProjectAPI.Controllers
                 }
             }
 
-<<<<<<< HEAD
             _context.Entry(tmpCompany).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
             return Ok();
 
-=======
-            return company;
->>>>>>> merge
         }
 
         // POST: api/Company
