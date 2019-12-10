@@ -31,7 +31,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Assignment>> GetAssignment(long id)
         {
-            var assignment = await _context.Assignments.FindAsync(id);
+            var assignment = await _context.Assignments.Include(a => a.Tags).Include(a => a.Company).Include(a => a.Status).FirstOrDefaultAsync(a=> a.AssignmentID == id);
 
             if (assignment == null)
             {
@@ -147,5 +147,27 @@ namespace FreelancerProjectAPI.Controllers
 
             return assignments;
         }
-    }
+
+		[HttpGet("UserAssignments")]
+		public async Task<ActionResult<IEnumerable<UserAssignment>>> GetUserAssignments()
+		{
+			return await _context.UserAssignments.Include(u=> u.User).Include(u => u.Assignment).ToListAsync();
+		}
+
+		[HttpGet("byUserID")]
+		public async Task<ActionResult<IEnumerable<Assignment>>> GetAssignmentsByUserID(int userID)
+		{
+			var userAssignments = _context.UserAssignments.Include(ua=> ua.Assignment).Where(ua => ua.User.UserID == userID);
+			List <Assignment> assignments = new List<Assignment>();
+			foreach (var ua in userAssignments)
+			{
+				var found = _context.Assignments.FirstOrDefault(a => a.AssignmentID == ua.Assignment.AssignmentID);
+				if (found != null)
+				{
+					assignments.Add(_context.Assignments.Include(a => a.Tags).Include(a => a.Company).Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == ua.Assignment.AssignmentID));
+				} 
+			}
+			return assignments;
+		}
+	}
 }

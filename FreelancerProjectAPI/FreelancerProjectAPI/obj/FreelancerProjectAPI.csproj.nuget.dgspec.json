@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj": {}
+    "D:\\ThomasMore1920\\Angular\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj": {
+    "D:\\ThomasMore1920\\Angular\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj",
+        "projectUniqueName": "D:\\ThomasMore1920\\Angular\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj",
         "projectName": "FreelancerProjectAPI",
-        "projectPath": "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj",
-        "packagesPath": "C:\\Users\\jeffv\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\obj\\",
+        "projectPath": "D:\\ThomasMore1920\\Angular\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj",
+        "packagesPath": "C:\\Users\\emmyb\\.nuget\\packages\\",
+        "outputPath": "D:\\ThomasMore1920\\Angular\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\jeffv\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\emmyb\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
