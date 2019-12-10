@@ -95,18 +95,27 @@ namespace FreelancerProjectAPI.Models
                     Postcode="BE2440",
                     Address="Teststreet 123"
                 },
-                Tags = new List<Tag>
+
+            };
+
+            user.TagUsers = new List<TagUser>
+            {
+                new TagUser()
                 {
-                    new Tag()
+                    Tag=new Tag()
                     {
                         TagName="Student"
                     },
-                    new Tag()
+                    User=user
+                },
+                new TagUser()
+                {
+                    Tag=new Tag()
                     {
                         TagName="New"
-                    }
+                    },
+                    User=user
                 }
-
             };
 
             Company company = new Company()
@@ -180,15 +189,19 @@ namespace FreelancerProjectAPI.Models
                     Postcode = "FR440",
                     Address = "Teststreet 12893"
                 },
-                Company = company,
-                Tags = new List<Tag>
+                Company = company
+                ,Status=status
+            };
+            assignment.TagAssignments = new List<TagAssignment>()
+            {
+                new TagAssignment()
                 {
-                    new Tag()
+                    Tag=new Tag()
                     {
                         TagName="TestTag"
-                    }
+                    },
+                    Assignment = assignment
                 }
-                ,Status=status
             };
 
             UserAssignment ua = new UserAssignment()

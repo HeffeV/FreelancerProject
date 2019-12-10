@@ -8,7 +8,7 @@ namespace FreelancerProjectAPI.Models
     public class Assignment
     {
         public long AssignmentID { get; set; }
-        public ICollection<Tag> Tags { get; set; }
+        public ICollection<TagAssignment> TagAssignments { get; set; }
         public string Description { get; set; }
         public string AssignmentName { get; set; }
         public Location Location { get; set; }
