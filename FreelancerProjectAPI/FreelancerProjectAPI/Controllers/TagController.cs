@@ -101,5 +101,29 @@ namespace FreelancerProjectAPI.Controllers
         {
             return _context.Tags.Any(e => e.TagID == id);
         }
-    }
+
+		[HttpDelete("tagAssignment{id}")]
+		public async Task<ActionResult<TagAssignment>> DeleteTagAssignment(long id)
+		{
+			var tagAssignment = await _context.TagAssignments.FindAsync(id);
+			if (tagAssignment == null)
+			{
+				return NotFound();
+			}
+
+			_context.TagAssignments.Remove(tagAssignment);
+			await _context.SaveChangesAsync();
+
+			return tagAssignment;
+		}
+
+		[HttpPost("tagAssignment")]
+		public async Task<ActionResult<TagAssignment>> PostTagAssignment(TagAssignment ta)
+		{
+			_context.TagAssignments.Add(ta);
+			await _context.SaveChangesAsync();
+
+			return CreatedAtAction("GetTag", new { id = ta.TagAssignmentID }, ta);
+		}
+	}
 }
