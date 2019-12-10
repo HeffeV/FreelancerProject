@@ -89,6 +89,8 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            UserType userType = _context.UserTypes.Find(user.UserType.UserTypeID);
+            user.UserType = userType;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
