@@ -24,14 +24,14 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Assignment>>> GetAssignments()
         {
-            return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a=>a.Tag).Include(a => a.Company).Include(a=>a.Status).ToListAsync();
+            return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a=>a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a=>a.Status).ToListAsync();
         }
 
         // GET: api/Assignment/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Assignment>> GetAssignment(long id)
         {
-            var assignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefaultAsync(a=> a.AssignmentID == id);
+            var assignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).FirstOrDefaultAsync(a=> a.AssignmentID == id);
 
             if (assignment == null)
             {
@@ -47,7 +47,7 @@ namespace FreelancerProjectAPI.Controllers
         {
             Assignment tmpAssignment;
 
-            tmpAssignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefaultAsync(a => a.AssignmentID==assignment.AssignmentID);
+            tmpAssignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(a => a.Location).FirstOrDefaultAsync(a => a.AssignmentID==assignment.AssignmentID);
 
             foreach(TagAssignment ta in assignment.TagAssignments)
             {
@@ -86,7 +86,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Assignment>> DeleteAssignment(long id)
         {
-            var assignment = await _context.Assignments.Include(a => a.TagAssignments).Include(a => a.Company).Include(a => a.Status).FirstOrDefaultAsync(a=> a.AssignmentID == id);
+            var assignment = await _context.Assignments.Include(a => a.TagAssignments).Include(a => a.Company).Include(a => a.Status).Include(a => a.Location).FirstOrDefaultAsync(a=> a.AssignmentID == id);
             if (assignment == null)
             {
                 return NotFound();
