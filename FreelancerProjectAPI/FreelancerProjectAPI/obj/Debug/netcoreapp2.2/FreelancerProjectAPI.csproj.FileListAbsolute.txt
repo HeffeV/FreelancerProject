@@ -44,3 +44,17 @@ D:\ThomasMore1920\Angular\Application Challenge\FreelancerProject\FreelancerProj
 D:\ThomasMore1920\Angular\Application Challenge\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.RazorTargetAssemblyInfo.cache
 D:\ThomasMore1920\Angular\Application Challenge\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.dll
 D:\ThomasMore1920\Angular\Application Challenge\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.pdb
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.deps.json
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.runtimeconfig.json
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.runtimeconfig.dev.json
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.dll
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\bin\Debug\netcoreapp2.2\FreelancerProjectAPI.pdb
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.csprojAssemblyReference.cache
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.csproj.CoreCompileInputs.cache
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.RazorAssemblyInfo.cache
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.RazorAssemblyInfo.cs
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.AssemblyInfoInputs.cache
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.AssemblyInfo.cs
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.RazorTargetAssemblyInfo.cache
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.dll
+D:\Academiejaar 3\Angular\FreelancerProject\FreelancerProjectAPI\FreelancerProjectAPI\obj\Debug\netcoreapp2.2\FreelancerProjectAPI.pdb

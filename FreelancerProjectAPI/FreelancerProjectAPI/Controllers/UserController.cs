@@ -22,17 +22,29 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // GET: api/User
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
-        }
+        }*/
 
         // GET: api/User/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(long id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(u => u.UserType)
+                .Include(u => u.Skills)
+                    .ThenInclude(s => s.Category)
+                .Include(u => u.Reviews)
+                    .ThenInclude(r => r.Company)
+                .Include(u => u.ContactInfo)
+                .Include(u => u.UserCompanies)
+                .Include(u => u.Tags)
+                .Include(u => u.UserAssignments)
+                    .ThenInclude(ua => ua.Assignment)
+                .Include(u => u.Location)
+                .FirstOrDefaultAsync(u => u.UserID == id);
 
             if (user == null)
             {
