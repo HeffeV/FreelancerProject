@@ -24,7 +24,9 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tag>>> GetTags()
         {
-            return await _context.Tags.ToListAsync();
+            List<Tag> tags=  await _context.Tags.ToListAsync();
+            tags = tags.OrderBy(t => t.TagName).ToList();
+            return tags;
         }
 
         // GET: api/Tag/5
