@@ -169,5 +169,21 @@ namespace FreelancerProjectAPI.Controllers
 			}
 			return assignments;
 		}
-	}
+
+        [HttpGet("filterAssignments")]
+        public async Task<ActionResult<IEnumerable<Assignment>>> GetFilteredAssignments(string title)
+        {
+            List<Assignment> allAssignments = new List<Assignment>();
+
+            allAssignments = await _context.Assignments.Where(e=>e.AssignmentName.Contains(title)).
+                Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
+
+            if (allAssignments.Count > 0)
+            {
+                return allAssignments;
+            }
+
+            return NotFound();
+        }
+    }
 }

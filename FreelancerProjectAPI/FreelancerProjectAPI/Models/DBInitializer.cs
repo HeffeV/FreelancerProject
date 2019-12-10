@@ -95,6 +95,7 @@ namespace FreelancerProjectAPI.Models
                     Postcode="BE2440",
                     Address="Teststreet 123"
                 },
+                Image=""
 
             };
 

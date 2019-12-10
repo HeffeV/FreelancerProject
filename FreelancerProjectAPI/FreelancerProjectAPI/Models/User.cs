@@ -16,6 +16,7 @@ namespace FreelancerProjectAPI.Models
         public string LastName { get; set; }
         public string Bio { get; set; }
         public int BirthYear { get; set; }
+        public string Image { get; set; }
         [NotMapped]
         public string Token { get; set; }
 
