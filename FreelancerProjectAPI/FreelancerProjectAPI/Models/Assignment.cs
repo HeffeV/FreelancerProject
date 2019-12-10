@@ -15,5 +15,6 @@ namespace FreelancerProjectAPI.Models
         public Company Company { get; set; }
         public ICollection<UserAssignment> UserAssignments { get; set; }
         public Status Status { get; set; }
+        public string Image { get; set; }
     }
 }
