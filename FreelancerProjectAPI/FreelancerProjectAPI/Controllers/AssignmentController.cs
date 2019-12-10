@@ -178,12 +178,7 @@ namespace FreelancerProjectAPI.Controllers
             allAssignments = await _context.Assignments.Where(e=>e.AssignmentName.Contains(title)).
                 Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
 
-            if (allAssignments.Count > 0)
-            {
-                return allAssignments;
-            }
-
-            return NotFound();
+            return allAssignments;
         }
     }
 }
