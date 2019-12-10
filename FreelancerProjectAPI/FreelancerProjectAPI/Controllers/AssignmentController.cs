@@ -176,7 +176,7 @@ namespace FreelancerProjectAPI.Controllers
 			return assignments;
 		}
 
-        [HttpGet("filterAssignments")]
+        [HttpPost("filterAssignments")]
         public async Task<ActionResult<IEnumerable<Assignment>>> GetFilteredAssignments(FilterModel filterModel)
         {
             List<Assignment> allAssignments = new List<Assignment>();
