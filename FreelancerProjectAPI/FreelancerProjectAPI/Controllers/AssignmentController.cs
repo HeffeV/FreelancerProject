@@ -54,7 +54,18 @@ namespace FreelancerProjectAPI.Controllers
                 TagAssignment tmpTagAssignment = _context.TagAssignments.Include(t=>t.Tag).SingleOrDefault(t => t.Tag.TagName == ta.Tag.TagName&&t.TagAssignmentID==ta.TagAssignmentID);
                 if (tmpTagAssignment == null || tmpTagAssignment.Equals(null))
                 {
-                    tmpAssignment.TagAssignments.Add(new TagAssignment() { Tag = new Tag() { TagName = ta.Tag.TagName }, Assignment = tmpAssignment });
+                    //tag is nog niet toegevoegd aan assignment
+                    Tag tmpTag = _context.Tags.SingleOrDefault(t => t.TagName == ta.Tag.TagName);
+                    if (tmpTag == null || tmpTagAssignment.Equals(null))
+                    {
+                        //tag bestaat niet
+                        tmpAssignment.TagAssignments.Add(new TagAssignment() { Tag = new Tag() { TagName = ta.Tag.TagName }, Assignment = tmpAssignment });
+                    }
+                    else
+                    {
+                        //tag bestaat
+                        tmpAssignment.TagAssignments.Add(new TagAssignment() { Tag = tmpTag, Assignment = tmpAssignment });
+                    }
                 }
             }
 

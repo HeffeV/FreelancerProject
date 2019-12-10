@@ -68,7 +68,18 @@ namespace FreelancerProjectAPI.Controllers
                 TagCompany tmpTagCompany = _context.TagCompanies.Include(t=>t.Tag).SingleOrDefault(t => t.Tag.TagName == tc.Tag.TagName && t.TagCompanyID == tc.TagCompanyID);
                 if (tmpTagCompany == null || tmpTagCompany.Equals(null))
                 {
-                    tmpCompany.TagCompanies.Add(new TagCompany() { Tag = new Tag() { TagName = tc.Tag.TagName }, Company = tmpCompany });
+                    //tag is nog niet toegevoegd aan assignment
+                    Tag tmpTag = _context.Tags.SingleOrDefault(t => t.TagName == tc.Tag.TagName);
+                    if (tmpTag == null || tmpTag.Equals(null))
+                    {
+                        //tag bestaat niet
+                        tmpCompany.TagCompanies.Add(new TagCompany() { Tag = new Tag() { TagName = tc.Tag.TagName }, Company = tmpCompany });
+                    }
+                    else
+                    {
+                        //tag bestaat niet
+                        tmpCompany.TagCompanies.Add(new TagCompany() { Tag = tmpTag, Company = tmpCompany });
+                    }
                 }
             }
 
