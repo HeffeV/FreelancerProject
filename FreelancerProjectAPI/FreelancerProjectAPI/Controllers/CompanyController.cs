@@ -31,7 +31,6 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Company>> GetCompany(long id)
         {
-            var userid = int.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
             var company = await _context.Companies
                 .Include(c=> c.Assignments)
                 .Include(c=> c.ContactInfo)
@@ -82,7 +81,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Company>> PostCompany(Company company)
         {
-            var userid = int.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
+            var userid = long.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
             User user = _context.Users.Find(userid);
 
             UserCompany com = new UserCompany()
