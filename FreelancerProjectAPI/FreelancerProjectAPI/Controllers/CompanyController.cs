@@ -37,6 +37,7 @@ namespace FreelancerProjectAPI.Controllers
                 .Include(c => c.Location)
                 .Include(c => c.Reviews)
                 .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
+                .Include(c => c.TagCompanies)
                 .FirstOrDefaultAsync(c=>c.CompanyID == id);
 
             if (company == null)
