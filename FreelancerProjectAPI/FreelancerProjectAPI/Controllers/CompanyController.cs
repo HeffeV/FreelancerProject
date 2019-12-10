@@ -50,32 +50,29 @@ namespace FreelancerProjectAPI.Controllers
 
         // PUT: api/Company/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(long id, Company company)
+        public async Task<IActionResult> PutCompany(Company company)
         {
-            if (id != company.CompanyID)
+
+            Company tmpCompany;
+
+            tmpCompany = await _context.Companies
+                .Include(c => c.Assignments)
+                .Include(c => c.ContactInfo)
+                .Include(c => c.Location)
+                .Include(c => c.Reviews)
+                .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
+                .Include(c => c.TagCompanies).ThenInclude(tc => tc.Tag).FirstOrDefaultAsync(c => c.CompanyID == company.CompanyID);
+
+            foreach (TagCompany tc in company.TagCompanies)
             {
-                return BadRequest();
+                tmpCompany.TagCompanies.Add(new TagCompany() { Tag = new Tag() { TagName = tc.Tag.TagName }, Company = tmpCompany });
             }
 
             _context.Entry(company).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompanyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
+            return Ok();
 
-            return NoContent();
         }
 
         // POST: api/Company
