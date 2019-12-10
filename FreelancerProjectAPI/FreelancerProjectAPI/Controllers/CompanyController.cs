@@ -163,7 +163,7 @@ namespace FreelancerProjectAPI.Controllers
         [Route("getRandoms")]
         public async Task<ActionResult<IEnumerable<Company>>> GetRandomCompanies()
         {
-            var allCompanies = await _context.Companies.ToListAsync();
+            var allCompanies = await _context.Companies.Include(a => a.TagCompanies).ThenInclude(a => a.Tag).ToListAsync();
             List<Company> companies = new List<Company>();
             Random r = new Random();
             if (allCompanies.Count > 0)
