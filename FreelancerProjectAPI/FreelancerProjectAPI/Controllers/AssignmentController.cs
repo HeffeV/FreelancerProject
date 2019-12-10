@@ -64,11 +64,13 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Assignment>> PostAssignment(Assignment assignment,int companyID)
         {
-			Company company = _context.Companies.FirstOrDefault(c => c.CompanyID == companyID);
+			Company company = _context.Companies.Include(c=> c.Location).FirstOrDefault(c => c.CompanyID == companyID);
 			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 1);
+			Location location = company.Location;
 
 			assignment.Company = company;
 			assignment.Status = status;
+			assignment.Location = location;
 
             _context.Assignments.Add(assignment);
             await _context.SaveChangesAsync();
