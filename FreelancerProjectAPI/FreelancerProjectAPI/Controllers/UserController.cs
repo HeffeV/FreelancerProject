@@ -40,9 +40,10 @@ namespace FreelancerProjectAPI.Controllers
                     .ThenInclude(r => r.Company)
                 .Include(u => u.ContactInfo)
                 .Include(u => u.UserCompanies)
-                .Include(u => u.TagUsers).ThenInclude(u=>u.Tag)
+                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
                 .Include(u => u.UserAssignments)
                     .ThenInclude(ua => ua.Assignment)
+                        .ThenInclude(a => a.Status)
                 .Include(u => u.Location)
                 .FirstOrDefaultAsync(u => u.UserID == id);
 
