@@ -23,6 +23,9 @@ namespace FreelancerProjectAPI.Models
         public DbSet<Company> Companies { get; set; }
         public DbSet<Status> Status { get; set; }
         public DbSet<UserAssignment> UserAssignments { get; set; }
+        public DbSet<TagUser> TagUsers { get; set; }
+        public DbSet<TagAssignment> TagAssignments { get; set; }
+        public DbSet<TagCompany> TagCompanies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,6 +42,9 @@ namespace FreelancerProjectAPI.Models
             modelBuilder.Entity<Company>().ToTable("Company");
             modelBuilder.Entity<Status>().ToTable("Status");
             modelBuilder.Entity<UserAssignment>().ToTable("UserAssignment");
+            modelBuilder.Entity<TagCompany>().ToTable("TagCompany");
+            modelBuilder.Entity<TagAssignment>().ToTable("TagAssignment");
+            modelBuilder.Entity<TagUser>().ToTable("TagUser");
         }
     }
 }
