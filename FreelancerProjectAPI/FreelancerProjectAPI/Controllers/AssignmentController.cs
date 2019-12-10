@@ -179,8 +179,9 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost("filterAssignments")]
         public async Task<ActionResult<IEnumerable<Assignment>>> GetFilteredAssignments(FilterModel filterModel)
         {
+            
             List<Assignment> allAssignments = new List<Assignment>();
-            if (filterModel.Title == "" || filterModel.Title == null)
+            if (filterModel.Title == "")
             {
                 allAssignments= await _context.Assignments.
                     Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
@@ -189,6 +190,26 @@ namespace FreelancerProjectAPI.Controllers
             {
                 allAssignments = await _context.Assignments.Where(e => e.AssignmentName.Contains(filterModel.Title)).
                     Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
+            }
+
+            if (filterModel.Tags.Count > 0)
+            {
+                List<Assignment> tmpAssignments = new List<Assignment>();
+                foreach (Tag tag in filterModel.Tags)
+                {
+                    //allAssignments = allAssignments.Where(t => t.TagAssignments.Where(t => t.Tag.TagID == tag.TagID));
+                    foreach(Assignment assignment in allAssignments)
+                    {
+                        foreach(TagAssignment tagAssignment in assignment.TagAssignments)
+                        {
+                            if (tagAssignment.Tag.TagID == tag.TagID)
+                            {
+                                tmpAssignments.Add(assignment);
+                            }
+                        }
+                    }
+                    allAssignments = tmpAssignments;
+                }
             }
 
             return allAssignments;
