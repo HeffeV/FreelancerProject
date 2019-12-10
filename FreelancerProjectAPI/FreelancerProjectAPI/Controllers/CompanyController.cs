@@ -68,7 +68,7 @@ namespace FreelancerProjectAPI.Controllers
                 tmpCompany.TagCompanies.Add(new TagCompany() { Tag = new Tag() { TagName = tc.Tag.TagName }, Company = tmpCompany });
             }
 
-            _context.Entry(company).State = EntityState.Modified;
+            _context.Entry(tmpCompany).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
             return Ok();
