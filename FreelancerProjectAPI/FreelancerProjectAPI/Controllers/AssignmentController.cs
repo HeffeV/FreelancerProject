@@ -174,9 +174,16 @@ namespace FreelancerProjectAPI.Controllers
         public async Task<ActionResult<IEnumerable<Assignment>>> GetFilteredAssignments(string title)
         {
             List<Assignment> allAssignments = new List<Assignment>();
-
-            allAssignments = await _context.Assignments.Where(e=>e.AssignmentName.Contains(title)).
-                Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
+            if (title == "" || title == null)
+            {
+                allAssignments= await _context.Assignments.
+                    Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
+            }
+            else
+            {
+                allAssignments = await _context.Assignments.Where(e => e.AssignmentName.Contains(title)).
+                    Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
+            }
 
             return allAssignments;
         }
