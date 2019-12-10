@@ -104,13 +104,21 @@ namespace FreelancerProjectAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Company>> DeleteCompany(long id)
         {
-            var company = await _context.Companies.FindAsync(id);
+            var company = await _context.Companies
+               .Include(c => c.Assignments)
+                .Include(c => c.ContactInfo)
+                .Include(c => c.Location)
+                .Include(c => c.Reviews)
+                .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
+                .FirstOrDefaultAsync(c => c.CompanyID == id);
+
             if (company == null)
             {
                 return NotFound();
             }
 
-            _context.Companies.Remove(company);
+            _context.Companies
+                .Remove(company);
             await _context.SaveChangesAsync();
 
             return company;
