@@ -48,6 +48,15 @@ namespace FreelancerProjectAPI.Controllers
             return company;
         }
 
+
+        [HttpPut("updateimage")]
+        public async Task<IActionResult> PutImage(Company company)
+        {
+
+            _context.Entry(company).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
         // PUT: api/Company/5
         [HttpPut]
         public async Task<IActionResult> PutCompany(Company company)
@@ -62,6 +71,14 @@ namespace FreelancerProjectAPI.Controllers
                 .Include(c => c.Reviews)
                 .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
                 .Include(c => c.TagCompanies).ThenInclude(tc => tc.Tag).FirstOrDefaultAsync(c => c.CompanyID == company.CompanyID);
+            tmpCompany.CompanyName = company.CompanyName;
+            tmpCompany.Location.Country = company.Location.Country;
+            tmpCompany.Location.Address = company.Location.Address;
+            tmpCompany.Location.Postcode = company.Location.Postcode;
+            tmpCompany.About = company.About;
+            tmpCompany.ContactInfo.LinkedIn = company.ContactInfo.LinkedIn;
+            tmpCompany.ContactInfo.MobileNumber = company.ContactInfo.MobileNumber;
+
 
             foreach (TagCompany tc in company.TagCompanies)
             {
@@ -84,7 +101,6 @@ namespace FreelancerProjectAPI.Controllers
             }
 
             _context.Entry(tmpCompany).State = EntityState.Modified;
-
             await _context.SaveChangesAsync();
             return Ok();
 
