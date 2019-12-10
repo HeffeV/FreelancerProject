@@ -49,7 +49,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // PUT: api/Company/5
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> PutCompany(Company company)
         {
 
