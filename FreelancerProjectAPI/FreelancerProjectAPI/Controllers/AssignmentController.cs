@@ -45,30 +45,19 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAssignment(long id, Assignment assignment)
         {
-            if (id != assignment.AssignmentID)
+            Assignment tmpAssignment;
+
+            tmpAssignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefaultAsync(a => a.AssignmentID==id);
+
+            foreach(TagAssignment ta in assignment.TagAssignments)
             {
-                return BadRequest();
+                tmpAssignment.TagAssignments.Add(new TagAssignment() { TagAssignmentID=0,Tag=ta.Tag,Assignment=tmpAssignment});
             }
 
             _context.Entry(assignment).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AssignmentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: api/Assignment
