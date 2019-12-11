@@ -364,7 +364,7 @@ namespace FreelancerProjectAPI.Controllers
 			userAssignment.Assignment = assignment;
 			userAssignment.Accepted = false;
 
-			if (_context.UserAssignments.FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID) != null)
+			if (_context.UserAssignments.FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID) == null)
 			{
 				_context.UserAssignments.Add(userAssignment);
 				await _context.SaveChangesAsync();
