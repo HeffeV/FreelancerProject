@@ -192,7 +192,7 @@ namespace FreelancerProjectAPI.Controllers
 		[HttpGet("byUserID")]
 		public List<Assignment> GetAssignmentsByUserID(int userID)
 		{
-			var userAssignments = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua=>ua.User).Where(ua => ua.User.UserID == userID);
+			var userAssignments = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).Where(ua => ua.User.UserID == userID);
 			List<Assignment> assignments = new List<Assignment>();
 			foreach (var ua in userAssignments)
 			{
@@ -327,13 +327,13 @@ namespace FreelancerProjectAPI.Controllers
 		[HttpGet("byCompany")]
 		public List<Assignment> GetAssignmentsByCompany(int userID)
 		{
-			var userCompanies = _context.UserCompanies.Include(uc=> uc.User).Include(uc=> uc.Company).Where(uc => uc.User.UserID == userID);
+			var userCompanies = _context.UserCompanies.Include(uc => uc.User).Include(uc => uc.Company).Where(uc => uc.User.UserID == userID);
 			List<Company> companies = new List<Company>();
 			List<Assignment> assignments = new List<Assignment>();
 
 			foreach (var uc in userCompanies)
 			{
-				companies.Add(_context.Companies.Include(c=> c.Assignments).FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
+				companies.Add(_context.Companies.Include(c => c.Assignments).FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
 			}
 			foreach (var c in companies)
 			{
@@ -356,9 +356,11 @@ namespace FreelancerProjectAPI.Controllers
 			userAssignment.Assignment = assignment;
 			userAssignment.Accepted = false;
 
-			_context.UserAssignments.Add(userAssignment);
-			await _context.SaveChangesAsync();
-
+			if (_context.UserAssignments.FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID) != null)
+			{
+				_context.UserAssignments.Add(userAssignment);
+				await _context.SaveChangesAsync();
+			}
 			return userAssignment;
 		}
 
@@ -372,6 +374,5 @@ namespace FreelancerProjectAPI.Controllers
 
 			return userAssignment;
 		}
-
 	}
 }
