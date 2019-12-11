@@ -192,7 +192,7 @@ namespace FreelancerProjectAPI.Controllers
 		[HttpGet("byUserID")]
 		public List<Assignment> GetAssignmentsByUserID(int userID)
 		{
-			var userAssignments = _context.UserAssignments.Include(ua => ua.Assignment).Where(ua => ua.User.UserID == userID);
+			var userAssignments = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua=>ua.User).Where(ua => ua.User.UserID == userID);
 			List<Assignment> assignments = new List<Assignment>();
 			foreach (var ua in userAssignments)
 			{
@@ -259,7 +259,11 @@ namespace FreelancerProjectAPI.Controllers
 					{
 						if (ua.User.UserID == userID && ua.Accepted == false)
 						{
-							assignments.Add(_context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID));
+							var found = _context.Assignments.FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID);
+							if (found != null)
+							{
+								assignments.Add(_context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID));
+							}
 						}
 					}
 				}
@@ -281,7 +285,11 @@ namespace FreelancerProjectAPI.Controllers
 					{
 						if (ua.User.UserID == userID && ua.Accepted == true)
 						{
-							assignments.Add(_context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID));
+							var found = _context.Assignments.FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID);
+							if (found != null)
+							{
+								assignments.Add(_context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID));
+							}
 						}
 					}
 				}
@@ -303,7 +311,11 @@ namespace FreelancerProjectAPI.Controllers
 					{
 						if (ua.User.UserID == userID && ua.Accepted == true)
 						{
-							assignments.Add(_context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID));
+							var found = _context.Assignments.FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID);
+							if (found != null)
+							{
+								assignments.Add(_context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID));
+							}
 						}
 					}
 				}
