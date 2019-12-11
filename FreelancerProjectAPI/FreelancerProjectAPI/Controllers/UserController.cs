@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FreelancerProjectAPI.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FreelancerProjectAPI.Controllers
 {
@@ -56,6 +57,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // PUT: api/User/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(long id, User user)
         {
@@ -98,6 +100,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // DELETE: api/User/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(long id)
         {
