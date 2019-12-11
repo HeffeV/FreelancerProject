@@ -368,9 +368,10 @@ namespace FreelancerProjectAPI.Controllers
 			{
 				_context.UserAssignments.Add(userAssignment);
 				await _context.SaveChangesAsync();
-			}
-			return userAssignment;
-		}
+                return Ok();
+            }
+            return BadRequest();
+        }
 
         [Authorize]
         [HttpDelete("CancelAssignment")]
