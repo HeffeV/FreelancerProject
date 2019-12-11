@@ -171,7 +171,7 @@ namespace FreelancerProjectAPI.Controllers
 		[Route("getRandoms")]
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetRandomAssignments()
 		{
-			var allAssignments = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(e=>e.Status).Where(e=>e.Status.StatusID==4).ToListAsync();
+			List<Assignment> allAssignments = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(e=>e.Status).Where(e=>e.Status.StatusID==4).ToListAsync();
 			List<Assignment> assignments = new List<Assignment>();
 			Random r = new Random();
 			if (allAssignments.Count > 0)
