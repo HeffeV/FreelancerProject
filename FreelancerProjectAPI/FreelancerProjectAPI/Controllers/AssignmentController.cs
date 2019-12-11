@@ -34,7 +34,6 @@ namespace FreelancerProjectAPI.Controllers
             return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).Include(a=>a.Status).Where(a=>a.Status.StatusID==4).ToListAsync();
         }
 
-        [Authorize]
         // GET: api/Assignment/5
         [HttpGet("{id}")]
 		public async Task<ActionResult<Assignment>> GetAssignment(long id)
