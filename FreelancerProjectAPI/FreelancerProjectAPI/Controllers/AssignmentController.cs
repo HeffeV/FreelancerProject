@@ -124,6 +124,34 @@ namespace FreelancerProjectAPI.Controllers
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
 
+			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 4);
+			assignment.Status = status;
+
+			_context.Entry(assignment).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
+
+			return assignment;
+		}
+		[HttpPut("closeAssignment")]
+		public async Task<ActionResult<Assignment>> CloseAssignment(long id)
+		{
+			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
+
+			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 3);
+			assignment.Status = status;
+
+			_context.Entry(assignment).State = EntityState.Modified;
+			await _context.SaveChangesAsync();
+
+			return assignment;
+		}
+		
+ 
+		[HttpPut("FinishAssignment")]
+		public async Task<ActionResult<Assignment>> FinishAssignment(long id)
+		{
+			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
+
 			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 2);
 			assignment.Status = status;
 
@@ -132,7 +160,8 @@ namespace FreelancerProjectAPI.Controllers
 
 			return assignment;
 		}
-        [HttpGet]
+	
+		[HttpGet]
         [Route("getRandoms")]
         public async Task<ActionResult<IEnumerable<Assignment>>> GetRandomAssignments()
         {
