@@ -333,7 +333,7 @@ namespace FreelancerProjectAPI.Controllers
 			return assignments;
 		}
 
-		[HttpPut("ApplyForAssignment")]
+		[HttpPost("ApplyForAssignment")]
 		public async Task<ActionResult<UserAssignment>> ApplyForAssignment(int assignmentID, int userID)
 		{
 			Assignment assignment = _context.Assignments.Find(assignmentID);
