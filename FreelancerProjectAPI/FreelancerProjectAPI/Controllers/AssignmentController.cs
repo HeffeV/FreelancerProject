@@ -354,8 +354,8 @@ namespace FreelancerProjectAPI.Controllers
 		[HttpPost("ApplyForAssignment")]
 		public async Task<ActionResult<UserAssignment>> ApplyForAssignment(int assignmentID, int userID)
 		{
-			Assignment assignment = _context.Assignments.Find(assignmentID);
-			User user = _context.Users.Find(userID);
+			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == assignmentID);
+			User user = _context.Users.FirstOrDefault(u => u.UserID == userID);
 
 			UserAssignment userAssignment = new UserAssignment();
 			userAssignment.User = user;
