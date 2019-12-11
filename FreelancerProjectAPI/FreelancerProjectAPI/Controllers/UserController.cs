@@ -91,12 +91,19 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-            UserType userType = _context.UserTypes.Find(user.UserType.UserTypeID);
-            user.UserType = userType;
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            if (!_context.Users.Any(e => e.Username == user.Username) && !_context.Users.Any(e => e.Email == user.Email))
+            {
+                UserType userType = _context.UserTypes.Find(user.UserType.UserTypeID);
+                user.UserType = userType;
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.UserID }, user);
+                return CreatedAtAction("GetUser", new { id = user.UserID }, user);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: api/User/5
