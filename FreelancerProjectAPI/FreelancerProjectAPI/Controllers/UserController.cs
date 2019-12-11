@@ -58,15 +58,22 @@ namespace FreelancerProjectAPI.Controllers
 
         // PUT: api/User/5
         [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        [HttpPut]
+        public async Task<IActionResult> PutUser([FromBody]User user)
+
         {
-            if (id != user.UserID)
+
+            User tmpUser = await _context.Users.Include(u => u.TagUsers).FirstOrDefaultAsync(u => u.UserID == user.UserID);
+
+            foreach (TagUser tu in tmpUser.TagUsers)
             {
-                return BadRequest();
+                //_context.tag
             }
 
             _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(user.Location).State = EntityState.Modified;
+            _context.Entry(user.ContactInfo).State = EntityState.Modified;
+            _context.Entry(user.TagUsers).State = EntityState.Modified;
 
             try
             {
@@ -74,7 +81,7 @@ namespace FreelancerProjectAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!UserExists(user.UserID))
                 {
                     return NotFound();
                 }
