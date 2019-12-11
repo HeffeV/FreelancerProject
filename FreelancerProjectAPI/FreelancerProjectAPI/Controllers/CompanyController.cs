@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FreelancerProjectAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FreelancerProjectAPI.Controllers
 {
@@ -48,7 +49,7 @@ namespace FreelancerProjectAPI.Controllers
             return company;
         }
 
-
+        [Authorize]
         [HttpPut("updateimage")]
         public async Task<IActionResult> PutImage(Company company)
         {
@@ -57,7 +58,9 @@ namespace FreelancerProjectAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
         // PUT: api/Company/5
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> PutCompany(Company company)
         {
@@ -107,6 +110,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // POST: api/Company
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Company>> PostCompany(Company company)
         {
@@ -130,6 +134,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // DELETE: api/Company/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Company>> DeleteCompany(long id)
         {
@@ -158,7 +163,8 @@ namespace FreelancerProjectAPI.Controllers
             return _context.Companies.Any(e => e.CompanyID == id);
         }
 
-		[HttpGet("ByUser")]
+        [Authorize]
+        [HttpGet("ByUser")]
 		public ActionResult<IEnumerable<Company>> FindCompanyByUser(int userID)
 		{
 			var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID);
@@ -174,6 +180,7 @@ namespace FreelancerProjectAPI.Controllers
 			return companies;
 
 		}
+
 
         [HttpGet]
         [Route("getRandoms")]

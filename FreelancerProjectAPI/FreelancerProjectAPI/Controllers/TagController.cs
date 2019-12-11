@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FreelancerProjectAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FreelancerProjectAPI.Controllers
 {
@@ -44,6 +45,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // PUT: api/Tag/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTag(long id, Tag tag)
         {
@@ -74,6 +76,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // POST: api/Tag
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Tag>> PostTag(Tag tag)
         {
@@ -104,7 +107,8 @@ namespace FreelancerProjectAPI.Controllers
             return _context.Tags.Any(e => e.TagID == id);
         }
 
-		[HttpDelete("tagAssignment/{id}")]
+        [Authorize]
+        [HttpDelete("tagAssignment/{id}")]
 		public async Task<ActionResult<TagAssignment>> DeleteTagAssignment(long id)
 		{
 			var tagAssignment = await _context.TagAssignments.FindAsync(id);
@@ -119,7 +123,8 @@ namespace FreelancerProjectAPI.Controllers
 			return tagAssignment;
 		}
 
-		[HttpPost("tagAssignment")]
+        [Authorize]
+        [HttpPost("tagAssignment")]
 		public async Task<ActionResult<TagAssignment>> PostTagAssignment(TagAssignment ta)
 		{
 			_context.TagAssignments.Add(ta);
