@@ -349,27 +349,5 @@ namespace FreelancerProjectAPI.Controllers
 
 			return userAssignment;
 		}
-
-		public void setUAToFalse(int userAssignmentID) {
-
-			var ua = _context.UserAssignments.Find(userAssignmentID);
-			ua.Accepted = false;
-
-			_context.Entry(ua).State = EntityState.Modified;
-			_context.SaveChanges();
-
-		}
-		public void setUAToTrue(int userAssignmentID)
-		{
-
-			var ua = _context.UserAssignments.Find(userAssignmentID);
-			ua.Accepted = true;
-
-			_context.Entry(ua).State = EntityState.Modified;
-			_context.SaveChanges();
-
-		}
-
-
 	}
 }
