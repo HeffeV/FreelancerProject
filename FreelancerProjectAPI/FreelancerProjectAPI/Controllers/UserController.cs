@@ -102,7 +102,7 @@ namespace FreelancerProjectAPI.Controllers
             }
             else
             {
-                return BadRequest();
+                return NotFound();
             }
         }
 
