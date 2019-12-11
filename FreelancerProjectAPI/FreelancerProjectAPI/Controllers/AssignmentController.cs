@@ -361,5 +361,17 @@ namespace FreelancerProjectAPI.Controllers
 
 			return userAssignment;
 		}
+
+		[HttpDelete("CancelAssignment")]
+		public async Task<ActionResult<UserAssignment>> CancelAssignment(int assignmentID, int userID)
+		{
+			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID);
+
+			_context.UserAssignments.Remove(userAssignment);
+			await _context.SaveChangesAsync();
+
+			return userAssignment;
+		}
+
 	}
 }
