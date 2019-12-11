@@ -27,8 +27,14 @@ namespace FreelancerProjectAPI.Controllers
 			return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).ToListAsync();
 		}
 
-		// GET: api/Assignment/5
-		[HttpGet("{id}")]
+        [HttpGet("AllOpenAssignments")]
+        public async Task<ActionResult<IEnumerable<Assignment>>> GetAllOpenAssignments()
+        {
+            return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).Include(a=>a.Status).Where(a=>a.Status.StatusID==4).ToListAsync();
+        }
+
+        // GET: api/Assignment/5
+        [HttpGet("{id}")]
 		public async Task<ActionResult<Assignment>> GetAssignment(long id)
 		{
 			var assignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).FirstOrDefaultAsync(a => a.AssignmentID == id);
@@ -165,7 +171,7 @@ namespace FreelancerProjectAPI.Controllers
 		[Route("getRandoms")]
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetRandomAssignments()
 		{
-			var allAssignments = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).ToListAsync();
+			List<Assignment> allAssignments = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(e=>e.Status).Where(e=>e.Status.StatusID==4).ToListAsync();
 			List<Assignment> assignments = new List<Assignment>();
 			Random r = new Random();
 			if (allAssignments.Count > 0)
@@ -213,12 +219,12 @@ namespace FreelancerProjectAPI.Controllers
 			if (filterModel.Title == "")
 			{
 				allAssignments = await _context.Assignments.
-					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
+					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(e => e.Status).Where(a=>a.Status.StatusID==4).ToListAsync();
 			}
 			else
 			{
-				allAssignments = await _context.Assignments.Where(e => e.AssignmentName.Contains(filterModel.Title)).
-					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).ToListAsync();
+				allAssignments = await _context.Assignments.Include(e => e.Status).
+					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Where(e => e.AssignmentName.Contains(filterModel.Title)&&e.Status.StatusID==4).ToListAsync();
 			}
 
 			if (filterModel.Tags.Count > 0)
