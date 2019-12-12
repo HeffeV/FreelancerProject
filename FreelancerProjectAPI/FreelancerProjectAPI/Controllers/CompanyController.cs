@@ -203,5 +203,29 @@ namespace FreelancerProjectAPI.Controllers
 
             return companies;
         }
-    }
+
+		[HttpGet("CheckIfOwnCompany")]
+		public Boolean CheckIfOwnCompany(int companyID, int userID)
+		{
+			var userCompanies = _context.UserCompanies.Include(uc => uc.User).Include(uc => uc.Company).Where(uc => uc.User.UserID == userID);
+			List<Company> companies = new List<Company>();
+			List<Assignment> assignments = new List<Assignment>();
+
+			foreach (var uc in userCompanies)
+			{
+				companies.Add(_context.Companies.Include(c => c.Assignments).FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
+			}
+			foreach (var company in companies)
+			{
+				
+					if (company.CompanyID == companyID)
+					{
+						return true;
+					}
+				
+			}
+			return false;
+
+		}
+	}
 }
