@@ -21,10 +21,26 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // GET: api/Skill
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Skill>>> GetSkillsNotFromUser(long id)
         {
-            return await _context.Skills.ToListAsync();
+            //var skills = await _context.Skills.ToListAsync();
+            var skills = await _context.Skills.ToListAsync();
+
+            List<Skill> rSkills = new List<Skill>();
+            
+
+            foreach(Skill s in skills)
+            {
+                var userSkill = await _context.UserSkills.Where(us => us.Skill.SkillID == s.SkillID).FirstOrDefaultAsync();
+
+                if(userSkill == null)
+                {
+                    rSkills.Add(s);
+                }
+            }
+
+            return rSkills;
         }
     }
 }

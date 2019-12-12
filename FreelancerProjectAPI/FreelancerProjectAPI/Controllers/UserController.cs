@@ -35,7 +35,7 @@ namespace FreelancerProjectAPI.Controllers
         {
             var user = await _context.Users
                 .Include(u => u.UserType)
-                .Include(u => u.UserSkills).ThenInclude(u=>u.Skill)
+                .Include(u => u.UserSkills).ThenInclude(u => u.Skill)
                     .ThenInclude(s => s.Category)
                 .Include(u => u.Reviews)
                     .ThenInclude(r => r.Company)
@@ -61,9 +61,9 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> PutUser([FromBody]User user)
         {
-
-            User tmpUser =  await _context.Users
-                .Include(u => u.Skills)
+            User tmpUser = await _context.Users
+                .Include(u => u.UserSkills).ThenInclude(us => us.Skill)
+                .Include(u => u.UserSkills).ThenInclude(us => us.User)
                 .Include(u => u.ContactInfo)
                 .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
                 .Include(u => u.Location)
@@ -81,44 +81,38 @@ namespace FreelancerProjectAPI.Controllers
             tmpUser.Name = user.Name;
             tmpUser.Username = user.Username;
 
-            foreach (TagUser tu in tmpUser.TagUsers)
+            foreach (TagUser tc in user.TagUsers)
             {
-                _context.TagUsers.Remove(tu);
-            }
-            foreach (TagUser tu in user.TagUsers)
-            {
-                _context.TagUsers.Add(tu);
-            }
-
-            foreach (Skill s in tmpUser.Skills)
-            {
-                _context.Skills.Remove(s);
-            }
-            foreach (Skill s in user.Skills)
-            {
-                _context.Skills.Add(s);
+                TagUser tmpTagUser = _context.TagUsers.Include(t => t.Tag).SingleOrDefault(t => t.Tag.TagName == tc.Tag.TagName && t.TagUserID == tc.TagUserID);
+                if (tmpTagUser == null || tmpTagUser.Equals(null))
+                {
+                    //tag is nog niet toegevoegd aan user
+                    Tag tmpTag = _context.Tags.SingleOrDefault(t => t.TagName == tc.Tag.TagName);
+                    if (tmpTag == null || tmpTag.Equals(null))
+                    {
+                        tmpUser.TagUsers.Add(new TagUser() { Tag = new Tag() { TagName = tc.Tag.TagName }, User = tmpUser });
+                    }
+                }
             }
 
+            foreach (UserSkill us in user.UserSkills)
+            {
+                UserSkill tmpUserSkill = _context.UserSkills.Include(uss => uss.Skill).SingleOrDefault(uss => uss.Skill.SkillName == us.Skill.SkillName && uss.UserSkillID == us.UserSkillID);
+                if (tmpUserSkill == null || tmpUserSkill.Equals(null))
+                {
+                    //skill is nog niet toegevoegd aan user
+                    Skill tmpSkill = _context.Skills.SingleOrDefault(s => s.SkillName == us.Skill.SkillName);
+                    if (tmpSkill == null || tmpSkill.Equals(null))
+                    {
+                        tmpUser.UserSkills.Add(new UserSkill() { User = tmpUser , Skill = new Skill() { SkillName = us.Skill.SkillName }});
+                    }
+                }
+
+            }
 
             _context.Entry(tmpUser).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(user.UserID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: api/User
