@@ -32,8 +32,8 @@ namespace FreelancerProjectAPI.Controllers
         [Route("checkifuserreviewedcompany/{companyid}")]
         public Boolean checkIfUserReviewedCompany(long companyid)
         {
-            //var userid = long.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
-            long userid = 2;
+            var userid = long.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
+            //long userid = 2;
             User user = _context.Users.Find(userid);
             var company = _context.Companies
                 .Include(c => c.Reviews).ThenInclude(r=> r.User)
