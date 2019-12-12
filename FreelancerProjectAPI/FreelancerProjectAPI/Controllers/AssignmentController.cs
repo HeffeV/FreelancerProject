@@ -223,7 +223,7 @@ namespace FreelancerProjectAPI.Controllers
 			if (filterModel.Title == "")
 			{
 				allAssignments = await _context.Assignments.
-					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(e => e.Status).Where(a=>a.Status..CurrentStatus == "Open").ToListAsync();
+					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(e => e.Status).Where(a=>a.Status.CurrentStatus == "Open").ToListAsync();
 			}
 			else
 			{
