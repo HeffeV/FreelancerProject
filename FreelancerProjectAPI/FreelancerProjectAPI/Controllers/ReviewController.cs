@@ -74,7 +74,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         [HttpPost]
-        [Route("addReviewToCompany")]
+        [Route("addreviewtocompany")]
         public ActionResult<Review> PostReview(Review review)
         {
             var userid = long.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
