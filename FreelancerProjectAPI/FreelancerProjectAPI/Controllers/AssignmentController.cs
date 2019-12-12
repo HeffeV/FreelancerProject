@@ -394,7 +394,6 @@ namespace FreelancerProjectAPI.Controllers
 			{
 				return NotFound();
 			}
-
 			return userAssignment;
 		}
 	}
