@@ -121,7 +121,7 @@ namespace FreelancerProjectAPI.Controllers
         {
             if (!_context.Users.Any(e => e.Username == user.Username) && !_context.Users.Any(e => e.Email == user.Email))
             {
-                UserType userType = _context.UserTypes.Find(user.UserType.UserTypeID);
+                UserType userType = _context.UserTypes.FirstOrDefault(e=>e.Type==user.UserType.Type);
                 user.UserType = userType;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
