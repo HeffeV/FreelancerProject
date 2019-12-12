@@ -384,5 +384,18 @@ namespace FreelancerProjectAPI.Controllers
 
 			return userAssignment;
 		}
+
+		[HttpGet("UserAssignment")]
+		public async Task<ActionResult<UserAssignment>> GetUserAssignment(int assignmentID, int userID)
+		{
+			var userAssignment = _context.UserAssignments.FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID);
+
+			if (userAssignment == null)
+			{
+				return NotFound();
+			}
+
+			return userAssignment;
+		}
 	}
 }
