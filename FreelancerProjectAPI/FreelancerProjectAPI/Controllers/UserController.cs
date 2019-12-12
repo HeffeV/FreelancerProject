@@ -60,20 +60,47 @@ namespace FreelancerProjectAPI.Controllers
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> PutUser([FromBody]User user)
-
         {
 
-            User tmpUser = await _context.Users.Include(u => u.TagUsers).FirstOrDefaultAsync(u => u.UserID == user.UserID);
+            User tmpUser =  await _context.Users
+                .Include(u => u.Skills)
+                .Include(u => u.ContactInfo)
+                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
+                .Include(u => u.Location)
+                .FirstOrDefaultAsync(u => u.UserID == user.UserID);
+
+            tmpUser.Location.Country = user.Location.Country;
+            tmpUser.Location.Address = user.Location.Address;
+            tmpUser.Location.Postcode = user.Location.Postcode;
+            tmpUser.ContactInfo.MobileNumber = user.ContactInfo.MobileNumber;
+            tmpUser.ContactInfo.LinkedIn = user.ContactInfo.LinkedIn;
+            tmpUser.Email = user.Email;
+            tmpUser.BirthYear = user.BirthYear;
+            tmpUser.Bio = user.Bio;
+            tmpUser.LastName = user.LastName;
+            tmpUser.Name = user.Name;
+            tmpUser.Username = user.Username;
 
             foreach (TagUser tu in tmpUser.TagUsers)
             {
-                //_context.tag
+                _context.TagUsers.Remove(tu);
+            }
+            foreach (TagUser tu in user.TagUsers)
+            {
+                _context.TagUsers.Add(tu);
             }
 
-            _context.Entry(user).State = EntityState.Modified;
-            _context.Entry(user.Location).State = EntityState.Modified;
-            _context.Entry(user.ContactInfo).State = EntityState.Modified;
-            _context.Entry(user.TagUsers).State = EntityState.Modified;
+            foreach (Skill s in tmpUser.Skills)
+            {
+                _context.Skills.Remove(s);
+            }
+            foreach (Skill s in user.Skills)
+            {
+                _context.Skills.Add(s);
+            }
+
+
+            _context.Entry(tmpUser).State = EntityState.Modified;
 
             try
             {
