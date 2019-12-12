@@ -174,7 +174,7 @@ namespace FreelancerProjectAPI.Controllers
                 var found = _context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID);
                 if (found != null)
                 {
-                    companies.Add(_context.Companies.Include(c => c.Assignments).FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
+                    companies.Add(_context.Companies.Include(c => c.Assignments).ThenInclude(a => a.Status).FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
                 }
             }
             return companies;
