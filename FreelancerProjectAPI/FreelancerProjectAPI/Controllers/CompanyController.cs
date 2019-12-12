@@ -36,7 +36,7 @@ namespace FreelancerProjectAPI.Controllers
                 .Include(c => c.Assignments).ThenInclude(a => a.TagAssignments).ThenInclude(a => a.Tag)
                 .Include(c => c.ContactInfo)
                 .Include(c => c.Location)
-                .Include(c => c.Reviews)
+                .Include(c => c.Reviews).ThenInclude(c=>c.User)
                 .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
                 .Include(c => c.TagCompanies).ThenInclude(tc => tc.Tag)
                 .FirstOrDefaultAsync(c => c.CompanyID == id);
