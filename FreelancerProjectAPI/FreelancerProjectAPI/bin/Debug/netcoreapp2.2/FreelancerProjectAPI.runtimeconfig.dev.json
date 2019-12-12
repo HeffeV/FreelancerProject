@@ -1,13 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-<<<<<<< HEAD
       "C:\\Users\\gyesb\\.dotnet\\store\\|arch|\\|tfm|",
       "C:\\Users\\gyesb\\.nuget\\packages",
-=======
-      "C:\\Users\\Ali Kiyak\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Ali Kiyak\\.nuget\\packages",
->>>>>>> bedrijven reviews toepassen
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
     ]
   }
