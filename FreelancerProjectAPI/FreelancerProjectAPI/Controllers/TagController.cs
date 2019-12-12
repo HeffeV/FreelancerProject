@@ -78,6 +78,31 @@ namespace FreelancerProjectAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Tag>> DeleteTag(long id)
         {
+            var assignmenttags = await _context.TagAssignments.Where(t => t.Tag.TagID == id).ToListAsync();
+            if (assignmenttags != null)
+            {
+                foreach (TagAssignment ta in assignmenttags)
+                {
+                    _context.TagAssignments.Remove(ta);
+                }
+            }
+            var companytags = await _context.TagCompanies.Where(t => t.Tag.TagID == id).ToListAsync();
+            if (companytags != null)
+            {
+                foreach (TagCompany ta in companytags)
+                {
+                    _context.TagCompanies.Remove(ta);
+                }
+            }
+            var usertags = await _context.TagUsers.Where(t => t.Tag.TagID == id).ToListAsync();
+            if (usertags != null)
+            {
+                foreach (TagUser ta in usertags)
+                {
+                    _context.TagUsers.Remove(ta);
+                }
+            }
+
             var tag = await _context.Tags.FindAsync(id);
             if (tag == null)
             {
