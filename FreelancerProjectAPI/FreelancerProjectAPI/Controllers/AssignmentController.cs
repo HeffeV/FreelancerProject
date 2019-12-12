@@ -396,5 +396,30 @@ namespace FreelancerProjectAPI.Controllers
 			}
 			return userAssignment;
 		}
+
+		[HttpGet("CheckIfOwnAssignment")]
+		public Boolean CheckIfOwnAssignment(int assignmentID, int userID)
+		{
+			var userCompanies = _context.UserCompanies.Include(uc => uc.User).Include(uc => uc.Company).Where(uc => uc.User.UserID == userID);
+			List<Company> companies = new List<Company>();
+			List<Assignment> assignments = new List<Assignment>();
+
+			foreach (var uc in userCompanies)
+			{
+				companies.Add(_context.Companies.Include(c => c.Assignments).FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
+			}
+			foreach (var c in companies)
+			{
+				foreach (var assignment in c.Assignments)
+				{
+					if (assignment.AssignmentID == assignmentID)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+
+		}
 	}
 }
