@@ -39,7 +39,7 @@ namespace FreelancerProjectAPI.Controllers
                 .Include(c => c.Reviews)
                 .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
                 .Include(c => c.TagCompanies).ThenInclude(tc => tc.Tag)
-                .FirstOrDefaultAsync(c=>c.CompanyID == id);
+                .FirstOrDefaultAsync(c => c.CompanyID == id);
 
             if (company == null)
             {
@@ -85,7 +85,7 @@ namespace FreelancerProjectAPI.Controllers
 
             foreach (TagCompany tc in company.TagCompanies)
             {
-                TagCompany tmpTagCompany = _context.TagCompanies.Include(t=>t.Tag).SingleOrDefault(t => t.Tag.TagName == tc.Tag.TagName && t.TagCompanyID == tc.TagCompanyID);
+                TagCompany tmpTagCompany = _context.TagCompanies.Include(t => t.Tag).SingleOrDefault(t => t.Tag.TagName == tc.Tag.TagName && t.TagCompanyID == tc.TagCompanyID);
                 if (tmpTagCompany == null || tmpTagCompany.Equals(null))
                 {
                     //tag is nog niet toegevoegd aan assignment
@@ -165,21 +165,21 @@ namespace FreelancerProjectAPI.Controllers
 
         [Authorize]
         [HttpGet("ByUser")]
-		public ActionResult<IEnumerable<Company>> FindCompanyByUser(int userID)
-		{
-			var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID);
-			List<Company> companies = new List<Company>();
-			foreach (var uc in usercompanies)
-			{
-				var found = _context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID);
-				if (found != null)
-				{
-					companies.Add(_context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
-				}
-			}
-			return companies;
+        public ActionResult<IEnumerable<Company>> FindCompanyByUser(int userID)
+        {
+            var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID);
+            List<Company> companies = new List<Company>();
+            foreach (var uc in usercompanies)
+            {
+                var found = _context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID);
+                if (found != null)
+                {
+                    companies.Add(_context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
+                }
+            }
+            return companies;
 
-		}
+        }
 
 
         [HttpGet]
