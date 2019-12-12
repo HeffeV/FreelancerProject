@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FreelancerProjectAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FreelancerProjectAPI.Controllers
 {
@@ -21,6 +22,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // GET: api/Skill
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Skill>>> GetSkillsNotFromUser(long id)
         {
@@ -41,6 +43,22 @@ namespace FreelancerProjectAPI.Controllers
             }
 
             return rSkills;
+        }
+
+        [Authorize]
+        [HttpDelete("userSkill/{id}")]
+        public async Task<ActionResult<UserSkill>> DeleteUserSkill(long id)
+        {
+            var userSkill = await _context.UserSkills.FindAsync(id);
+            if (userSkill == null)
+            {
+                return NotFound();
+            }
+
+            _context.UserSkills.Remove(userSkill);
+            await _context.SaveChangesAsync();
+
+            return userSkill;
         }
     }
 }

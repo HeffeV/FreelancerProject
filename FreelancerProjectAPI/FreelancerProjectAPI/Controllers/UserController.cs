@@ -106,6 +106,10 @@ namespace FreelancerProjectAPI.Controllers
                     {
                         tmpUser.UserSkills.Add(new UserSkill() { User = tmpUser , Skill = new Skill() { SkillName = us.Skill.SkillName }});
                     }
+                    else
+                    {
+                        tmpUser.UserSkills.Add(new UserSkill() { User = tmpUser, Skill = tmpSkill });
+                    }
                 }
 
             }
@@ -139,7 +143,17 @@ namespace FreelancerProjectAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(long id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(u => u.UserSkills).ThenInclude(u => u.Skill)
+                    .ThenInclude(s => s.Category)
+                .Include(u => u.ContactInfo)
+                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
+                .Include(u => u.UserAssignments)
+                    .ThenInclude(ua => ua.Assignment)
+                        .ThenInclude(a => a.Status)
+                .Include(u => u.Location)
+                .FirstOrDefaultAsync(u => u.UserID == id);
+
             if (user == null)
             {
                 return NotFound();

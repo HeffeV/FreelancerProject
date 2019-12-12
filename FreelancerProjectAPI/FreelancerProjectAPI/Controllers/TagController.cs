@@ -124,6 +124,22 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
         [Authorize]
+        [HttpDelete("tagUser/{id}")]
+        public async Task<ActionResult<TagUser>> DeleteTagUser(long id)
+        {
+            var tagUser = await _context.TagUsers.FindAsync(id);
+            if (tagUser == null)
+            {
+                return NotFound();
+            }
+
+            _context.TagUsers.Remove(tagUser);
+            await _context.SaveChangesAsync();
+
+            return tagUser;
+        }
+
+        [Authorize]
         [HttpPost("tagAssignment")]
 		public async Task<ActionResult<TagAssignment>> PostTagAssignment(TagAssignment ta)
 		{
