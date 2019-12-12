@@ -31,7 +31,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet("AllOpenAssignments")]
         public async Task<ActionResult<IEnumerable<Assignment>>> GetAllOpenAssignments()
         {
-            return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).Include(a=>a.Status).Where(a=>a.Status.StatusID==4).ToListAsync();
+            return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).Include(a=>a.Status).Where(a=>a.Status.CurrentStatus=="Open").ToListAsync();
         }
 
         // GET: api/Assignment/5
@@ -223,7 +223,7 @@ namespace FreelancerProjectAPI.Controllers
 			if (filterModel.Title == "")
 			{
 				allAssignments = await _context.Assignments.
-					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(e => e.Status).Where(a=>a.Status.StatusID==4).ToListAsync();
+					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(e => e.Status).Where(a=>a.Status..CurrentStatus == "Open").ToListAsync();
 			}
 			else
 			{
