@@ -21,7 +21,7 @@ namespace FreelancerProjectAPI.Models
         public string Token { get; set; }
 
         public UserType UserType { get; set; }
-        public ICollection<Skill> Skills { get; set; }
+        public ICollection<UserSkill> UserSkills { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ContactInfo ContactInfo { get; set; }
         public ICollection<UserCompany> UserCompanies {get;set;}

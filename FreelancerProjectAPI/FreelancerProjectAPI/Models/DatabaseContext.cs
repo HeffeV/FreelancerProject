@@ -26,6 +26,7 @@ namespace FreelancerProjectAPI.Models
         public DbSet<TagUser> TagUsers { get; set; }
         public DbSet<TagAssignment> TagAssignments { get; set; }
         public DbSet<TagCompany> TagCompanies { get; set; }
+        public DbSet<UserSkill> UserSkills { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +46,7 @@ namespace FreelancerProjectAPI.Models
             modelBuilder.Entity<TagCompany>().ToTable("TagCompany");
             modelBuilder.Entity<TagAssignment>().ToTable("TagAssignment");
             modelBuilder.Entity<TagUser>().ToTable("TagUser");
+            modelBuilder.Entity<UserSkill>().ToTable("UserSkill");
         }
     }
 }

@@ -35,7 +35,7 @@ namespace FreelancerProjectAPI.Controllers
         {
             var user = await _context.Users
                 .Include(u => u.UserType)
-                .Include(u => u.Skills)
+                .Include(u => u.UserSkills).ThenInclude(u=>u.Skill)
                     .ThenInclude(s => s.Category)
                 .Include(u => u.Reviews)
                     .ThenInclude(r => r.Company)

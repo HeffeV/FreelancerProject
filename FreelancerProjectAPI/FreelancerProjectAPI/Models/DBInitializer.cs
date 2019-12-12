@@ -73,17 +73,6 @@ namespace FreelancerProjectAPI.Models
                 Bio = "This my admin bio",
                 BirthYear = 1999,
                 UserType = userType,
-                Skills = new List<Skill>()
-                {
-                    new Skill()
-                    {
-                        SkillName = "C#"
-                    },
-                    new Skill()
-                    {
-                        SkillName = "PHP"
-                    }
-                },
                 ContactInfo=new ContactInfo
                 {
                     MobileNumber = "+3278596204",
@@ -97,6 +86,25 @@ namespace FreelancerProjectAPI.Models
                 },
                 Image=""
 
+            };
+            user.UserSkills = new List<UserSkill>()
+                {
+                    new UserSkill()
+                    {
+                        User = user,
+                        Skill=new Skill()
+                    {
+                        SkillName = "C#"
+                    }
+                    },
+                    new UserSkill()
+                    {
+                        User = user,
+                        Skill=new Skill()
+                    {
+                        SkillName = "PHP"
+                    }
+                } 
             };
 
             user.TagUsers = new List<TagUser>
