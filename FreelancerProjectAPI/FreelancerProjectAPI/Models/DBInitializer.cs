@@ -159,6 +159,7 @@ namespace FreelancerProjectAPI.Models
                         Description="Very good work",
                         Title="Excellent!",
                         Company=company
+                        ,UserReview=false
                     },
                     new Review()
                     {
@@ -166,6 +167,7 @@ namespace FreelancerProjectAPI.Models
                         Description="Bad",
                         Title="Scam!",
                         Company = company
+                        ,UserReview=false
                     }
             };
             company.Reviews = new List<Review>()
@@ -176,6 +178,7 @@ namespace FreelancerProjectAPI.Models
                         Description="Very good work",
                         Title="Excellent!",
                         User=user
+                        ,UserReview=true
                     },
                     new Review()
                     {
@@ -183,6 +186,7 @@ namespace FreelancerProjectAPI.Models
                         Description="Bad",
                         Title="Scam!",
                         User=user
+                        ,UserReview=true
                     }
                 };
 
