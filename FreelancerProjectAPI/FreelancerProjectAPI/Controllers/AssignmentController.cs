@@ -56,6 +56,9 @@ namespace FreelancerProjectAPI.Controllers
 
 			tmpAssignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(a => a.Location).FirstOrDefaultAsync(a => a.AssignmentID == assignment.AssignmentID);
 
+            tmpAssignment.AssignmentName = assignment.AssignmentName;
+            tmpAssignment.Description = assignment.Description;
+            tmpAssignment.Image = assignment.Image;
 			foreach (TagAssignment ta in assignment.TagAssignments)
 			{
 				TagAssignment tmpTagAssignment = _context.TagAssignments.Include(t => t.Tag).SingleOrDefault(t => t.Tag.TagName == ta.Tag.TagName && t.TagAssignmentID == ta.TagAssignmentID);
