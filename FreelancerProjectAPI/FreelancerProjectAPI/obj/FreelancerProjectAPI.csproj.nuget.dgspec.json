@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj": {}
+    "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj": {}
   },
   "projects": {
-    "D:\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj": {
+    "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj",
+        "projectUniqueName": "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj",
         "projectName": "FreelancerProjectAPI",
-        "projectPath": "D:\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj",
-        "packagesPath": "C:\\Users\\Ali Kiyak\\.nuget\\packages\\",
-        "outputPath": "D:\\Application Challenge\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\obj\\",
+        "projectPath": "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\FreelancerProjectAPI.csproj",
+        "packagesPath": "C:\\Users\\jeffv\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jeffv\\Desktop\\FreelancerProject\\FreelancerProject\\FreelancerProjectAPI\\FreelancerProjectAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Ali Kiyak\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jeffv\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -68,10 +68,16 @@
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

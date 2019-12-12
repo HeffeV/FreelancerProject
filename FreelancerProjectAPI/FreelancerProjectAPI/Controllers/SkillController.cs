@@ -60,5 +60,25 @@ namespace FreelancerProjectAPI.Controllers
 
             return userSkill;
         }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<Skill>> PostSkill(Skill skill)
+        {
+            if (_context.Skills.FirstOrDefault(t => t.SkillName == t.SkillName) == null)
+            {
+                Category category = _context.Categories.Find(skill.Category.CategoryID);
+                skill.Category = category;
+                _context.Skills.Add(skill);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetSkill", new { id = skill.SkillID }, skill);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
     }
 }

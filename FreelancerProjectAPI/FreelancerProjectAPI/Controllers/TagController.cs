@@ -80,10 +80,17 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Tag>> PostTag(Tag tag)
         {
-            _context.Tags.Add(tag);
-            await _context.SaveChangesAsync();
+            if (_context.Tags.FirstOrDefault(t => t.TagName == tag.TagName) == null)
+            {
+                _context.Tags.Add(tag);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetTag", new { id = tag.TagID }, tag);
+            }
+            else
+            {
+                return NotFound();
+            }
 
-            return CreatedAtAction("GetTag", new { id = tag.TagID }, tag);
         }
 
         // DELETE: api/Tag/5
