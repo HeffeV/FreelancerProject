@@ -47,32 +47,13 @@ namespace FreelancerProjectAPI.Controllers
         // PUT: api/Tag/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTag(long id, Tag tag)
+        public async Task<IActionResult> PutTag(Tag tag)
         {
-            if (id != tag.TagID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(tag).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TagExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            Tag tmpTag = _context.Tags.FirstOrDefault(t => t.TagID == tag.TagID);
+            tmpTag.TagName = tag.TagName;
+            _context.Entry(tmpTag).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: api/Tag
