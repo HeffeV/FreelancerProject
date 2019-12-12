@@ -169,5 +169,15 @@ namespace FreelancerProjectAPI.Controllers
         {
             return _context.Users.Any(e => e.UserID == id);
         }
+
+        [Authorize]
+        [HttpPut("updateavatar")]
+        public async Task<IActionResult> PutImage(User user)
+        {
+
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
