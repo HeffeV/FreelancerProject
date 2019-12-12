@@ -46,7 +46,7 @@ namespace FreelancerProjectAPI.Controllers
 
         // PUT: api/Tag/5
         [Authorize]
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> PutTag(Tag tag)
         {
             Tag tmpTag = _context.Tags.FirstOrDefault(t => t.TagID == tag.TagID);
