@@ -392,7 +392,7 @@ namespace FreelancerProjectAPI.Controllers
 
 			if (userAssignment == null)
 			{
-				return NotFound();
+				return null;
 			}
 			return userAssignment;
 		}
