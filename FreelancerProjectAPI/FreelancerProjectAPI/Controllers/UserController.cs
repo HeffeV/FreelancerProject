@@ -61,7 +61,11 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost("filteredUsers")]
         public async Task<ActionResult<IEnumerable<User>>> GetFilteredUsers(FilterUserModel filterUserModel)
         {
-            List<User> users = await _context.Users.Include(u => u.UserType).ToListAsync();
+            List<User> users = await _context.Users.Include(u => u.UserType)
+                .Include(u => u.UserSkills).ThenInclude(u => u.Skill).ThenInclude(s => s.Category)
+                .Include(u => u.ContactInfo)
+                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
+                .Include(u => u.Location).ToListAsync();
 
             if (filterUserModel.Email != null && filterUserModel.Email != "" && filterUserModel.Email != " ")
             {
