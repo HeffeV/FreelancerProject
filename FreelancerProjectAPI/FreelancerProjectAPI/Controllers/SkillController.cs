@@ -62,7 +62,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("PostSkill")]
         public async Task<ActionResult<Skill>> PostSkill(Skill skill)
         {
             if (_context.Skills.FirstOrDefault(t => t.SkillName == skill.SkillName) == null)
@@ -81,7 +81,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("PostCategory")]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
             if (_context.Categories.FirstOrDefault(t => t.CategoryName == category.CategoryName) == null)
@@ -99,7 +99,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("DeleteSkill")]
         public async Task<ActionResult<UserSkill>> DeleteSkill(long id)
         {
             var skill = await _context.Skills.FindAsync(id);
@@ -122,7 +122,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("DeleteCategory")]
         public async Task<ActionResult<Category>> DeleteCategory(long id)
         {
             var skills = await _context.Skills.Include(s=>s.Category).Where(e=>e.Category.CategoryID==id).ToListAsync();
