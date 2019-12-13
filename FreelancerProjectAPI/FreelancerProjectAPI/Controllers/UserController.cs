@@ -35,6 +35,17 @@ namespace FreelancerProjectAPI.Controllers
         {
             var user = await _context.Users
                 .Include(u => u.UserType)
+                .Include(u => u.UserSkills).ThenInclude(u => u.Skill)
+                    .ThenInclude(s => s.Category)
+                .Include(u => u.Reviews)
+                    .ThenInclude(r => r.Company)
+                .Include(u => u.ContactInfo)
+                .Include(u => u.UserCompanies)
+                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
+                .Include(u => u.UserAssignments)
+                    .ThenInclude(ua => ua.Assignment)
+                        .ThenInclude(a => a.Status)
+                .Include(u => u.Location)
                 .FirstOrDefaultAsync(u => u.UserID == id);
 
             if (user == null)
@@ -46,21 +57,24 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        [Authorize]
+        [HttpGet("filteredUsers")]
+        public async Task<ActionResult<IEnumerable<User>>> GetFilteredUsers(string email, string username, string usertype)
         {
-            var users = await _context.Users
-                .Include(u => u.UserType)
-                .Include(u => u.UserSkills).ThenInclude(u => u.Skill)
-                    .ThenInclude(s => s.Category)
-                .Include(u => u.Reviews)
-                    .ThenInclude(r => r.Company)
-                .Include(u => u.ContactInfo)
-                .Include(u => u.UserCompanies)
-                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
-                .Include(u => u.UserAssignments)
-                    .ThenInclude(ua => ua.Assignment)
-                        .ThenInclude(a => a.Status)
-                .Include(u => u.Location).ToListAsync();
+            List<User> users = await _context.Users.Include(u => u.UserType).ToListAsync();
+
+            if (email != null || email != "")
+            {
+                users = users.Where(u => u.Email.Contains(email)).ToList();
+            }
+            if(username != null || username != "")
+            {
+                users = users.Where(u => u.Username.Contains(username)).ToList();
+            }
+            if(usertype != null || usertype != "")
+            {
+                users = users.Where(u => u.UserType.Type==usertype).ToList();
+            }
 
             return users;
         }
