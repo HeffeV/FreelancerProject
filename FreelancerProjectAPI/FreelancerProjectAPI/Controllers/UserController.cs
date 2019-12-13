@@ -56,6 +56,26 @@ namespace FreelancerProjectAPI.Controllers
             return user;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        {
+            var users = await _context.Users
+                .Include(u => u.UserType)
+                .Include(u => u.UserSkills).ThenInclude(u => u.Skill)
+                    .ThenInclude(s => s.Category)
+                .Include(u => u.Reviews)
+                    .ThenInclude(r => r.Company)
+                .Include(u => u.ContactInfo)
+                .Include(u => u.UserCompanies)
+                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
+                .Include(u => u.UserAssignments)
+                    .ThenInclude(ua => ua.Assignment)
+                        .ThenInclude(a => a.Status)
+                .Include(u => u.Location).ToListAsync();
+
+            return users;
+        }
+
         // PUT: api/User/5
         [Authorize]
         [HttpPut]
