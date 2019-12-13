@@ -84,7 +84,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost("PostCategory")]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            if (_context.Categories.FirstOrDefault(t => t.CategoryName == category.CategoryName) == null)
+            if (_context.Categories.FirstOrDefault(t => t.CategoryName.ToLower() == category.CategoryName.ToLower()) == null)
             {
                 Category tmpCategory = new Category() { CategoryName=category.CategoryName};
                 _context.Categories.Add(tmpCategory);
