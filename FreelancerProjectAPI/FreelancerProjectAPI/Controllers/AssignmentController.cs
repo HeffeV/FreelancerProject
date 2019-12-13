@@ -457,6 +457,7 @@ namespace FreelancerProjectAPI.Controllers
                     Include(a => a.TagAssignments).ThenInclude(a => a.Tag)
                     .Include(a => a.Company)
                     .Include(a => a.Status)
+                    .Include(a=>a.Location)
                     .Include(e => e.Status).ToListAsync();
 
             if (filtermodel.CompanyName != null && filtermodel.CompanyName != "" && filtermodel.CompanyName != " ")
