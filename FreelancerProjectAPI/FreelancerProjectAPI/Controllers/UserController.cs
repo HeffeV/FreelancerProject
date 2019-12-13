@@ -58,7 +58,7 @@ namespace FreelancerProjectAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        [HttpGet("filteredUsers")]
+        [HttpPost("filteredUsers")]
         public async Task<ActionResult<IEnumerable<User>>> GetFilteredUsers(FilterUserModel filterUserModel)
         {
             List<User> users = await _context.Users.Include(u => u.UserType).ToListAsync();
