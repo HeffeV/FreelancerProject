@@ -171,14 +171,12 @@ namespace FreelancerProjectAPI.Controllers
         public async Task<ActionResult<User>> DeleteUser(long id)
         {
             var user = await _context.Users
-                .Include(u => u.UserSkills).ThenInclude(u => u.Skill)
-                    .ThenInclude(s => s.Category)
+                .Include(u => u.UserSkills)
                 .Include(u => u.ContactInfo)
-                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
+                .Include(u => u.TagUsers)
                 .Include(u => u.UserAssignments)
-                    .ThenInclude(ua => ua.Assignment)
-                        .ThenInclude(a => a.Status)
                 .Include(u => u.Location)
+                .Include(u=>u.UserCompanies)
                 .FirstOrDefaultAsync(u => u.UserID == id);
 
             if (user == null)
