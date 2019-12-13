@@ -65,19 +65,103 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Skill>> PostSkill(Skill skill)
         {
-            if (_context.Skills.FirstOrDefault(t => t.SkillName == t.SkillName) == null)
+            if (_context.Skills.FirstOrDefault(t => t.SkillName == skill.SkillName) == null)
             {
                 Category category = _context.Categories.Find(skill.Category.CategoryID);
                 skill.Category = category;
                 _context.Skills.Add(skill);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("GetSkill", new { id = skill.SkillID }, skill);
+                return Ok();
             }
             else
             {
                 return NotFound();
             }
 
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<Category>> PostCategory(Category category)
+        {
+            if (_context.Categories.FirstOrDefault(t => t.CategoryName == category.CategoryName) == null)
+            {
+                Category tmpCategory = new Category() { CategoryName=category.CategoryName};
+                _context.Categories.Add(tmpCategory);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<ActionResult<UserSkill>> DeleteSkill(long id)
+        {
+            var skill = await _context.Skills.FindAsync(id);
+            if (skill == null)
+            {
+                return NotFound();
+            }
+
+            var userskills = _context.UserSkills.Where(s => s.Skill.SkillID == id);
+
+            foreach(UserSkill userSkill in userskills)
+            {
+                _context.UserSkills.Remove(userSkill);
+            }
+
+            _context.Skills.Remove(skill);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<ActionResult<Category>> DeleteCategory(long id)
+        {
+            var skills = await _context.Skills.Include(s=>s.Category).Where(e=>e.Category.CategoryID==id).ToListAsync();
+            var category = await _context.Categories.FindAsync(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            List<UserSkill> userSkills = new List<UserSkill>();
+
+            foreach(Skill skill in skills)
+            {
+                userSkills.AddRange(_context.UserSkills.Where(e => e.Skill.SkillID==skill.SkillID));
+            }
+
+            foreach (UserSkill userSkill in userSkills)
+            {
+                _context.UserSkills.Remove(userSkill);
+            }
+
+            foreach (Skill skill in skills)
+            {
+                _context.Skills.Remove(skill);
+            }
+
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        {
+            var categories = await _context.Categories.ToListAsync();
+            return categories;
         }
 
     }
