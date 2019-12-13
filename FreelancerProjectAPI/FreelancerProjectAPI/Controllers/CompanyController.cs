@@ -139,11 +139,13 @@ namespace FreelancerProjectAPI.Controllers
         public async Task<ActionResult<Company>> DeleteCompany(long id)
         {
             var company = await _context.Companies
-                .Include(c => c.Assignments)
+                .Include(c => c.Assignments).ThenInclude(a=>a.UserAssignments)
+                .Include(c => c.Assignments).ThenInclude(a => a.TagAssignments)
                 .Include(c => c.ContactInfo)
                 .Include(c => c.Location)
                 .Include(c => c.Reviews)
                 .Include(c => c.UserCompanies)
+                .Include(c=>c.TagCompanies)
                 .FirstOrDefaultAsync(c => c.CompanyID == id);
 
             if (company == null)
