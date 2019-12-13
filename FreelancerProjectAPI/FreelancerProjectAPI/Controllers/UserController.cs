@@ -59,21 +59,21 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet]
         [Authorize]
         [HttpGet("filteredUsers")]
-        public async Task<ActionResult<IEnumerable<User>>> GetFilteredUsers(string email, string username, string usertype)
+        public async Task<ActionResult<IEnumerable<User>>> GetFilteredUsers(FilterUserModel filterUserModel)
         {
             List<User> users = await _context.Users.Include(u => u.UserType).ToListAsync();
 
-            if (email != null || email != "")
+            if (filterUserModel.Email != null || filterUserModel.Email != "")
             {
-                users = users.Where(u => u.Email.Contains(email)).ToList();
+                users = users.Where(u => u.Email.ToLower().Contains(filterUserModel.Email.ToLower())).ToList();
             }
-            if(username != null || username != "")
+            if(filterUserModel.Username != null || filterUserModel.Username != "")
             {
-                users = users.Where(u => u.Username.Contains(username)).ToList();
+                users = users.Where(u => u.Username.ToLower().Contains(filterUserModel.Username.ToLower())).ToList();
             }
-            if(usertype != null || usertype != "")
+            if(filterUserModel.UserType != null || filterUserModel.UserType != "")
             {
-                users = users.Where(u => u.UserType.Type==usertype).ToList();
+                users = users.Where(u => u.UserType.Type== filterUserModel.UserType).ToList();
             }
 
             return users;
