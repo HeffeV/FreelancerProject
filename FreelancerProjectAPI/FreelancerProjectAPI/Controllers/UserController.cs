@@ -189,7 +189,7 @@ namespace FreelancerProjectAPI.Controllers
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
-            return user;
+            return Ok();
         }
 
         private bool UserExists(long id)
