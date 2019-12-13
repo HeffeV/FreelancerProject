@@ -157,7 +157,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpGet("getCategories")]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
             var categories = await _context.Categories.ToListAsync();
