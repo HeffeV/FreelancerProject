@@ -448,5 +448,17 @@ namespace FreelancerProjectAPI.Controllers
 			return Ok();
 
 		}
+		[Authorize]
+		[HttpPut("DeclineAssignmentCandidate")]
+		public async Task<IActionResult> DeclineAssignmentCandidate(int assignmentID, int candidateID)
+		{
+			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == candidateID);
+
+			_context.UserAssignments.Remove(userAssignment);
+
+			await _context.SaveChangesAsync();
+			return Ok();
+
+		}
 	}
 }
