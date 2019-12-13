@@ -227,5 +227,33 @@ namespace FreelancerProjectAPI.Controllers
 			return false;
 
 		}
-	}
+
+        [HttpGet]
+        [Authorize]
+        [HttpPost("filteredCompanies")]
+        public async Task<ActionResult<IEnumerable<Company>>> GetFilteredUsers(FilterCompanyModel filterCompanyModel)
+        {
+            List<Company> companies = await _context.Companies
+                .Include(c => c.ContactInfo)
+                .Include(c => c.Location)
+                .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
+                .Include(c => c.TagCompanies).ThenInclude(tc => tc.Tag)
+                .ToListAsync();
+
+            if (filterCompanyModel.CompanyName != null && filterCompanyModel.CompanyName != "" && filterCompanyModel.CompanyName != " ")
+            {
+                companies = companies.Where(c => c.CompanyName.ToLower().Contains(filterCompanyModel.CompanyName.ToLower())).ToList();
+            }
+            if (filterCompanyModel.Country != null && filterCompanyModel.Country != "" && filterCompanyModel.Country != " ")
+            {
+                companies = companies.Where(c => c.Location.Country.ToLower().Contains(filterCompanyModel.Country.ToLower())).ToList();
+            }
+            if (filterCompanyModel.Postcode != null && filterCompanyModel.Postcode != "")
+            {
+                companies = companies.Where(c => c.Location.Postcode.ToLower().Contains(filterCompanyModel.Postcode.ToLower())).ToList();
+            }
+
+            return companies;
+        }
+    }
 }
