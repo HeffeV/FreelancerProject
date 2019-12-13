@@ -427,7 +427,7 @@ namespace FreelancerProjectAPI.Controllers
 
 		[Authorize]
 		[HttpPut("AcceptAssignmentCandidate")]
-		public async Task<IActionResult> AcceptAssignmentCandidate(int assignmentID, int candidateID, int userID)
+		public async Task<IActionResult> AcceptAssignmentCandidate(int assignmentID, int candidateID)
 		{
 			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == candidateID);
 
