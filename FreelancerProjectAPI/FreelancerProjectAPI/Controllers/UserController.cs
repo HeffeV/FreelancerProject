@@ -63,15 +63,15 @@ namespace FreelancerProjectAPI.Controllers
         {
             List<User> users = await _context.Users.Include(u => u.UserType).ToListAsync();
 
-            if (filterUserModel.Email != null || filterUserModel.Email != "")
+            if (filterUserModel.Email != null && filterUserModel.Email != "" && filterUserModel.Email != " ")
             {
                 users = users.Where(u => u.Email.ToLower().Contains(filterUserModel.Email.ToLower())).ToList();
             }
-            if(filterUserModel.Username != null || filterUserModel.Username != "")
+            if(filterUserModel.Username != null && filterUserModel.Username != "" && filterUserModel.Username != " ")
             {
                 users = users.Where(u => u.Username.ToLower().Contains(filterUserModel.Username.ToLower())).ToList();
             }
-            if(filterUserModel.UserType != null || filterUserModel.UserType != "")
+            if(filterUserModel.UserType != null && filterUserModel.UserType != "")
             {
                 users = users.Where(u => u.UserType.Type== filterUserModel.UserType).ToList();
             }
