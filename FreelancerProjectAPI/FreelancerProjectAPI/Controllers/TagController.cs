@@ -112,7 +112,7 @@ namespace FreelancerProjectAPI.Controllers
             _context.Tags.Remove(tag);
             await _context.SaveChangesAsync();
 
-            return tag;
+            return Ok();
         }
 
         private bool TagExists(long id)
