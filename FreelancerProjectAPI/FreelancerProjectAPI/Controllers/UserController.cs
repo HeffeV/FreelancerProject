@@ -56,7 +56,6 @@ namespace FreelancerProjectAPI.Controllers
             return user;
         }
 
-        [HttpGet]
         [Authorize]
         [HttpPost("filteredUsers")]
         public async Task<ActionResult<IEnumerable<User>>> GetFilteredUsers(FilterUserModel filterUserModel)

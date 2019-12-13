@@ -228,7 +228,6 @@ namespace FreelancerProjectAPI.Controllers
 
 		}
 
-        [HttpGet]
         [Authorize]
         [HttpPost("filteredCompanies")]
         public async Task<ActionResult<IEnumerable<Company>>> GetFilteredUsers(FilterCompanyModel filterCompanyModel)
