@@ -88,6 +88,8 @@ namespace FreelancerProjectAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> PutUser([FromBody]User user)
         {
+            UserType userType = _context.UserTypes.FirstOrDefault(e => e.Type == user.UserType.Type);
+
             User tmpUser = await _context.Users
                 .Include(u => u.UserSkills).ThenInclude(us => us.Skill)
                 .Include(u => u.UserSkills).ThenInclude(us => us.User)
@@ -96,6 +98,7 @@ namespace FreelancerProjectAPI.Controllers
                 .Include(u => u.Location)
                 .FirstOrDefaultAsync(u => u.UserID == user.UserID);
 
+            tmpUser.UserType = userType;
             tmpUser.Location.Country = user.Location.Country;
             tmpUser.Location.Address = user.Location.Address;
             tmpUser.Location.Postcode = user.Location.Postcode;
