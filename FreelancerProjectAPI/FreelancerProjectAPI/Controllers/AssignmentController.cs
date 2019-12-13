@@ -107,7 +107,7 @@ namespace FreelancerProjectAPI.Controllers
 		[HttpDelete("{id}")]
 		public async Task<ActionResult<Assignment>> DeleteAssignment(long id)
 		{
-			var assignment = await _context.Assignments.Include(a => a.TagAssignments).Include(a => a.Company).Include(a => a.Status).Include(a => a.Location).FirstOrDefaultAsync(a => a.AssignmentID == id);
+			var assignment = await _context.Assignments.Include(a => a.TagAssignments).Include(a => a.Location).Include(a=>a.UserAssignments).FirstOrDefaultAsync(a => a.AssignmentID == id);
 			if (assignment == null)
 			{
 				return NotFound();
@@ -116,7 +116,7 @@ namespace FreelancerProjectAPI.Controllers
 			_context.Assignments.Remove(assignment);
 			await _context.SaveChangesAsync();
 
-			return assignment;
+			return Ok();
 		}
 
 		private bool AssignmentExists(long id)
@@ -380,12 +380,12 @@ namespace FreelancerProjectAPI.Controllers
 		[HttpDelete("CancelAssignment")]
 		public async Task<ActionResult<UserAssignment>> CancelAssignment(int assignmentID, int userID)
 		{
-			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID);
+			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID);
 
 			_context.UserAssignments.Remove(userAssignment);
 			await _context.SaveChangesAsync();
 
-			return userAssignment;
+			return Ok();
 		}
 
 		[HttpGet("UserAssignment")]
