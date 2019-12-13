@@ -22,6 +22,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // GET: api/Company
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
         {
