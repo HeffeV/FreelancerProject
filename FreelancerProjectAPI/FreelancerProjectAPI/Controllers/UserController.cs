@@ -35,17 +35,6 @@ namespace FreelancerProjectAPI.Controllers
         {
             var user = await _context.Users
                 .Include(u => u.UserType)
-                .Include(u => u.UserSkills).ThenInclude(u => u.Skill)
-                    .ThenInclude(s => s.Category)
-                .Include(u => u.Reviews)
-                    .ThenInclude(r => r.Company)
-                .Include(u => u.ContactInfo)
-                .Include(u => u.UserCompanies)
-                .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
-                .Include(u => u.UserAssignments)
-                    .ThenInclude(ua => ua.Assignment)
-                        .ThenInclude(a => a.Status)
-                .Include(u => u.Location)
                 .FirstOrDefaultAsync(u => u.UserID == id);
 
             if (user == null)
