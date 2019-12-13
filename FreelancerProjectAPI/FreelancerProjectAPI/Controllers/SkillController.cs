@@ -164,5 +164,13 @@ namespace FreelancerProjectAPI.Controllers
             return categories;
         }
 
+        [Authorize]
+        [HttpGet("getSkills")]
+        public async Task<ActionResult<IEnumerable<Skill>>> GetSkill()
+        {
+            var skills = await _context.Skills.ToListAsync();
+            return skills;
+        }
+
     }
 }
