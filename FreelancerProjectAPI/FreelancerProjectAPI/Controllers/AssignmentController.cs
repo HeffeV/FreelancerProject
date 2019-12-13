@@ -28,17 +28,17 @@ namespace FreelancerProjectAPI.Controllers
 			return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).ToListAsync();
 		}
 
-        [HttpGet("AllOpenAssignments")]
-        public async Task<ActionResult<IEnumerable<Assignment>>> GetAllOpenAssignments()
-        {
-            return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).Include(a=>a.Status).Where(a=>a.Status.CurrentStatus=="Open").ToListAsync();
-        }
+		[HttpGet("AllOpenAssignments")]
+		public async Task<ActionResult<IEnumerable<Assignment>>> GetAllOpenAssignments()
+		{
+			return await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).Include(a => a.Status).Where(a => a.Status.CurrentStatus == "Open").ToListAsync();
+		}
 
-        // GET: api/Assignment/5
-        [HttpGet("{id}")]
+		// GET: api/Assignment/5
+		[HttpGet("{id}")]
 		public async Task<ActionResult<Assignment>> GetAssignment(long id)
 		{
-			var assignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).FirstOrDefaultAsync(a => a.AssignmentID == id);
+			var assignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.UserAssignments).ThenInclude(a => a.User).Include(a => a.Company).Include(a => a.Location).Include(a => a.Status).FirstOrDefaultAsync(a => a.AssignmentID == id);
 
 			if (assignment == null)
 			{
@@ -47,18 +47,18 @@ namespace FreelancerProjectAPI.Controllers
 
 			return assignment;
 		}
-        [Authorize]
-        // PUT: api/Assignment/5
-        [HttpPut]
+		[Authorize]
+		// PUT: api/Assignment/5
+		[HttpPut]
 		public async Task<IActionResult> PutAssignment(Assignment assignment)
 		{
 			Assignment tmpAssignment;
 
 			tmpAssignment = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(a => a.Location).FirstOrDefaultAsync(a => a.AssignmentID == assignment.AssignmentID);
 
-            tmpAssignment.AssignmentName = assignment.AssignmentName;
-            tmpAssignment.Description = assignment.Description;
-            tmpAssignment.Image = assignment.Image;
+			tmpAssignment.AssignmentName = assignment.AssignmentName;
+			tmpAssignment.Description = assignment.Description;
+			tmpAssignment.Image = assignment.Image;
 			foreach (TagAssignment ta in assignment.TagAssignments)
 			{
 				TagAssignment tmpTagAssignment = _context.TagAssignments.Include(t => t.Tag).SingleOrDefault(t => t.Tag.TagName == ta.Tag.TagName && t.TagAssignmentID == ta.TagAssignmentID);
@@ -84,9 +84,9 @@ namespace FreelancerProjectAPI.Controllers
 			await _context.SaveChangesAsync();
 			return Ok();
 		}
-        [Authorize]
-        // POST: api/Assignment
-        [HttpPost]
+		[Authorize]
+		// POST: api/Assignment
+		[HttpPost]
 		public async Task<ActionResult<Assignment>> PostAssignment(Assignment assignment, int companyID)
 		{
 			Company company = _context.Companies.Include(c => c.Location).FirstOrDefault(c => c.CompanyID == companyID);
@@ -102,9 +102,9 @@ namespace FreelancerProjectAPI.Controllers
 
 			return CreatedAtAction("GetAssignment", new { id = assignment.AssignmentID }, assignment);
 		}
-        [Authorize]
-        // DELETE: api/Assignment/5
-        [HttpDelete("{id}")]
+		[Authorize]
+		// DELETE: api/Assignment/5
+		[HttpDelete("{id}")]
 		public async Task<ActionResult<Assignment>> DeleteAssignment(long id)
 		{
 			var assignment = await _context.Assignments.Include(a => a.TagAssignments).Include(a => a.Company).Include(a => a.Status).Include(a => a.Location).FirstOrDefaultAsync(a => a.AssignmentID == id);
@@ -124,20 +124,20 @@ namespace FreelancerProjectAPI.Controllers
 			return _context.Assignments.Any(e => e.AssignmentID == id);
 		}
 
-        [Authorize]
-        [HttpGet("PossibleStatus")]
+		[Authorize]
+		[HttpGet("PossibleStatus")]
 		public async Task<ActionResult<IEnumerable<Status>>> GetStatusses()
 		{
 			return await _context.Status.ToListAsync();
 		}
 
-        [Authorize]
-        [HttpPut("PublishAssignment")]
+		[Authorize]
+		[HttpPut("PublishAssignment")]
 		public async Task<ActionResult<Assignment>> PublishAssignment(long id)
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
 
-			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 4);
+			Status status = _context.Status.FirstOrDefault(s => s.CurrentStatus == "Open");
 			assignment.Status = status;
 
 			_context.Entry(assignment).State = EntityState.Modified;
@@ -146,13 +146,13 @@ namespace FreelancerProjectAPI.Controllers
 			return assignment;
 		}
 
-        [Authorize]
-        [HttpPut("closeAssignment")]
+		[Authorize]
+		[HttpPut("closeAssignment")]
 		public async Task<ActionResult<Assignment>> CloseAssignment(long id)
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
 
-			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 3);
+			Status status = _context.Status.FirstOrDefault(s => s.CurrentStatus == "Closed");
 			assignment.Status = status;
 
 			_context.Entry(assignment).State = EntityState.Modified;
@@ -161,13 +161,13 @@ namespace FreelancerProjectAPI.Controllers
 			return assignment;
 		}
 
-        [Authorize]
-        [HttpPut("FinishAssignment")]
+		[Authorize]
+		[HttpPut("FinishAssignment")]
 		public async Task<ActionResult<Assignment>> FinishAssignment(long id)
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
 
-			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 2);
+			Status status = _context.Status.FirstOrDefault(s => s.CurrentStatus == "Finished");
 			assignment.Status = status;
 
 			_context.Entry(assignment).State = EntityState.Modified;
@@ -180,7 +180,7 @@ namespace FreelancerProjectAPI.Controllers
 		[Route("getRandoms")]
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetRandomAssignments()
 		{
-			List<Assignment> allAssignments = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(e=>e.Status).Where(e=>e.Status.StatusID==4).ToListAsync();
+			List<Assignment> allAssignments = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(e => e.Status).Where(e => e.Status.StatusID == 4).ToListAsync();
 			List<Assignment> assignments = new List<Assignment>();
 			Random r = new Random();
 			if (allAssignments.Count > 0)
@@ -198,8 +198,8 @@ namespace FreelancerProjectAPI.Controllers
 			return assignments;
 		}
 
-        [Authorize]
-        [HttpGet("byUserID")]
+		[Authorize]
+		[HttpGet("byUserID")]
 		public List<Assignment> GetAssignmentsByUserID(int userID)
 		{
 			var userAssignments = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).Where(ua => ua.User.UserID == userID);
@@ -223,12 +223,12 @@ namespace FreelancerProjectAPI.Controllers
 			if (filterModel.Title == "")
 			{
 				allAssignments = await _context.Assignments.
-					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(e => e.Status).Where(a=>a.Status.CurrentStatus == "Open").ToListAsync();
+					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Include(e => e.Status).Where(a => a.Status.CurrentStatus == "Open").ToListAsync();
 			}
 			else
 			{
 				allAssignments = await _context.Assignments.Include(e => e.Status).
-					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Where(e => e.AssignmentName.Contains(filterModel.Title)&&e.Status.StatusID==4).ToListAsync();
+					Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(a => a.Company).Include(a => a.Status).Where(e => e.AssignmentName.Contains(filterModel.Title) && e.Status.StatusID == 4).ToListAsync();
 			}
 
 			if (filterModel.Tags.Count > 0)
@@ -255,8 +255,8 @@ namespace FreelancerProjectAPI.Controllers
 			return allAssignments;
 		}
 
-        [Authorize]
-        [HttpGet("requestedAssignmentByUserID")]
+		[Authorize]
+		[HttpGet("requestedAssignmentByUserID")]
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetRequestedAssignmentsByUserID(int userID)
 		{
 			List<Assignment> assignmentsByUser = GetAssignmentsByUserID(userID);
@@ -281,8 +281,8 @@ namespace FreelancerProjectAPI.Controllers
 			return assignments;
 		}
 
-        [Authorize]
-        [HttpGet("inProgressAssignmentByUserID")]
+		[Authorize]
+		[HttpGet("inProgressAssignmentByUserID")]
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetInProgresAssignmentsByUserID(int userID)
 		{
 			List<Assignment> assignmentsByUser = GetAssignmentsByUserID(userID);
@@ -307,8 +307,8 @@ namespace FreelancerProjectAPI.Controllers
 			return assignments;
 		}
 
-        [Authorize]
-        [HttpGet("finishedAssignmentByUserID")]
+		[Authorize]
+		[HttpGet("finishedAssignmentByUserID")]
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetFinishedAssignmentsByUserID(int userID)
 		{
 			List<Assignment> assignmentsByUser = GetAssignmentsByUserID(userID);
@@ -355,8 +355,8 @@ namespace FreelancerProjectAPI.Controllers
 			return assignments;
 		}
 
-        [Authorize]
-        [HttpPost("ApplyForAssignment")]
+		[Authorize]
+		[HttpPost("ApplyForAssignment")]
 		public async Task<ActionResult<UserAssignment>> ApplyForAssignment(int assignmentID, int userID)
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == assignmentID);
@@ -371,13 +371,13 @@ namespace FreelancerProjectAPI.Controllers
 			{
 				_context.UserAssignments.Add(userAssignment);
 				await _context.SaveChangesAsync();
-                return Ok();
-            }
-            return BadRequest();
-        }
+				return Ok();
+			}
+			return BadRequest();
+		}
 
-        [Authorize]
-        [HttpDelete("CancelAssignment")]
+		[Authorize]
+		[HttpDelete("CancelAssignment")]
 		public async Task<ActionResult<UserAssignment>> CancelAssignment(int assignmentID, int userID)
 		{
 			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID);
@@ -422,6 +422,30 @@ namespace FreelancerProjectAPI.Controllers
 				}
 			}
 			return false;
+
+		}
+
+		[Authorize]
+		[HttpPut("AcceptAssignmentCandidate")]
+		public async Task<IActionResult> AcceptAssignmentCandidate(int assignmentID, int candidateID, int userID)
+		{
+			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == candidateID);
+
+			userAssignment.Accepted = true;
+			_context.Entry(userAssignment).State = EntityState.Modified;
+
+			Assignment assignment = _context.Assignments.Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == assignmentID);
+			assignment.Status = _context.Status.FirstOrDefault(s => s.CurrentStatus == "Closed");
+			_context.Entry(userAssignment).State = EntityState.Modified;
+
+			List<UserAssignment> userAssignments = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).Where(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID != candidateID).ToList();
+			foreach (var u in userAssignments)
+			{
+				_context.UserAssignments.Remove(u);
+			}
+
+			await _context.SaveChangesAsync();
+			return Ok();
 
 		}
 	}
