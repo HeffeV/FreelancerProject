@@ -232,7 +232,7 @@ namespace FreelancerProjectAPI.Controllers
 
         [Authorize]
         [HttpPost("filteredCompanies")]
-        public async Task<ActionResult<IEnumerable<Company>>> GetFilteredUsers(FilterCompanyModel filterCompanyModel)
+        public async Task<ActionResult<IEnumerable<Company>>> GetFilteredCompanies(FilterCompanyModel filterCompanyModel)
         {
             List<Company> companies = await _context.Companies
                 .Include(c => c.ContactInfo)

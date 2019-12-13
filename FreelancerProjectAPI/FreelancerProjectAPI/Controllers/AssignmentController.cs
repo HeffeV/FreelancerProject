@@ -448,5 +448,31 @@ namespace FreelancerProjectAPI.Controllers
 			return Ok();
 
 		}
-	}
+
+        [Authorize]
+        [HttpPost("adminFilteredAssignments")]
+        public async Task<ActionResult<IEnumerable<Assignment>>> GetFilteredAssignments(AssignmentFilterModel filtermodel)
+        {
+            List<Assignment> allAssignments = await _context.Assignments.
+                    Include(a => a.TagAssignments).ThenInclude(a => a.Tag)
+                    .Include(a => a.Company)
+                    .Include(a => a.Status)
+                    .Include(e => e.Status).ToListAsync();
+
+            if (filtermodel.CompanyName != null && filtermodel.CompanyName != "" && filtermodel.CompanyName != " ")
+            {
+                allAssignments = allAssignments.Where(c => c.Company.CompanyName.ToLower().Contains(filtermodel.CompanyName.ToLower())).ToList();
+            }
+            if (filtermodel.Status != null && filtermodel.Status != "" && filtermodel.Status != " ")
+            {
+                allAssignments = allAssignments.Where(c => c.Status.CurrentStatus.ToLower().Contains(filtermodel.Status.ToLower())).ToList();
+            }
+            if (filtermodel.Title != null && filtermodel.Title != "")
+            {
+                allAssignments = allAssignments.Where(c => c.AssignmentName.ToLower().Contains(filtermodel.Title.ToLower())).ToList();
+            }
+
+            return allAssignments;
+        }
+    }
 }
