@@ -68,6 +68,10 @@ namespace FreelancerProjectAPI.Controllers
             if (_context.Skills.FirstOrDefault(t => t.SkillName == skill.SkillName) == null)
             {
                 Category category = _context.Categories.FirstOrDefault(s=>s.CategoryName.ToLower()==skill.Category.CategoryName.ToLower());
+                if (category == null)
+                {
+                    return BadRequest();
+                }
                 skill.Category = category;
                 _context.Skills.Add(skill);
                 await _context.SaveChangesAsync();
