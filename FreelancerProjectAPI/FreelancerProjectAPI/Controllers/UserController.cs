@@ -240,7 +240,7 @@ namespace FreelancerProjectAPI.Controllers
             };
 
             message.Subject = "Password reset";
-            message.Body = "<html><head><link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'></head><body><p>New password: "+user.Password+"</p><button type='button' class='btn btn-primary'>Login</button></body></html>";
+            message.Body = "<html><body style='font-family: Arial;color:#818296;'><div style='width:100%; padding:5px; background-color: #10ABFE; color: white'><h2>Password reset</h2></div><p>Your password has been reset. Below you can find your new password. You can change it in your account settings.</p><p style='padding-bottom:15px;'>New password: <strong>" + user.Password+ "</strong></p><a style='background-color: #10ABFE; color:white; padding:10px; text-decoration: none;' href='https://subplementum-fp.firebaseapp.com'>Login to your account</a></body></html>";
 
             message.IsBodyHtml = true;
 
