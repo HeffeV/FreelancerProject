@@ -22,10 +22,11 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // GET: api/Review
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
         {
-            return await _context.Reviews.ToListAsync();
+            return await _context.Reviews.Include(r=>r.User).Include(r=>r.Company).ToListAsync();
         }
 
         [Authorize]
@@ -125,22 +126,6 @@ namespace FreelancerProjectAPI.Controllers
             await _context.SaveChangesAsync();
 
             return review;
-        }
-
-        // GET: api/Review
-        [HttpGet("UserReviews")]
-        public async Task<ActionResult<IEnumerable<Review>>> GetUserReviews()
-        {
-
-            return await _context.Reviews.Include(e=>e.Company).Include(e=>e.User).Where(e=>e.UserReview==true).ToListAsync();
-        }
-
-        // GET: api/Review
-        [HttpGet("companyReviews")]
-        public async Task<ActionResult<IEnumerable<Review>>> GetCompanyReviews()
-        {
-
-            return await _context.Reviews.Include(e => e.Company).Include(e => e.User).Where(e => e.UserReview == false).ToListAsync();
         }
 
         private bool ReviewExists(long id)
