@@ -109,6 +109,21 @@ namespace FreelancerProjectAPI.Controllers
             _context.SaveChanges();
             return CreatedAtAction("GetReview", new { id = review.ReviewID }, review);
         }
+        [Authorize]
+        [HttpPost]
+        [Route("addreviewtouser")]
+        public ActionResult<Review> PostReviewToUser(Review review)
+        {
+            User user = _context.Users.Find(review.User.UserID);
+            var company = _context.Companies.Find(review.Company.CompanyID);
+            review.User = user;
+            review.Company = company;
+            _context.Reviews.Add(review);
+            _context.SaveChanges();
+            company.Reviews.Add(review);
+            _context.SaveChanges();
+            return CreatedAtAction("GetReview", new { id = review.ReviewID }, review);
+        }
 
         // DELETE: api/Review/5
         [Authorize]
