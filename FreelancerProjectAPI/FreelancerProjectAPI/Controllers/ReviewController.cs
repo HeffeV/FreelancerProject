@@ -69,8 +69,6 @@ namespace FreelancerProjectAPI.Controllers
         public async Task<IActionResult> AdminPutReview(Review review)
         {
 
-            if (review != null)
-            {
                 Review tmpReview = _context.Reviews.Find(review.ReviewID);
                 if (tmpReview != null)
                 {
@@ -85,11 +83,6 @@ namespace FreelancerProjectAPI.Controllers
                 {
                     return NotFound();
                 }
-            }
-            else
-            {
-                return BadRequest();
-            }
         }
 
         [Authorize]
