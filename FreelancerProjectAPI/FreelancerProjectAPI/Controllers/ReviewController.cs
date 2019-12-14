@@ -69,13 +69,15 @@ namespace FreelancerProjectAPI.Controllers
         public async Task<IActionResult> AdminPutReview(Review review)
         {
 
+            if (review != null)
+            {
                 Review tmpReview = _context.Reviews.Find(review.ReviewID);
                 if (tmpReview != null)
                 {
                     tmpReview.Title = review.Title;
                     tmpReview.Description = review.Description;
 
-                    _context.Entry(review).State = EntityState.Modified;
+                    _context.Entry(tmpReview).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     return Ok();
                 }
@@ -83,6 +85,11 @@ namespace FreelancerProjectAPI.Controllers
                 {
                     return NotFound();
                 }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [Authorize]
