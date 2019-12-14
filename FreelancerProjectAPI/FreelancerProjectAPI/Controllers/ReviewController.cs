@@ -65,8 +65,8 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // PUT: api/Review/5
-        [HttpPut]
-        public async Task<IActionResult> PutReview(Review review)
+        [HttpPut("adminPut")]
+        public async Task<IActionResult> AdminPutReview(Review review)
         {
 
             if (review != null)
