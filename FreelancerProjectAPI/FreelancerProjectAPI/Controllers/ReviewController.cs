@@ -40,14 +40,38 @@ namespace FreelancerProjectAPI.Controllers
             var company = _context.Companies
                 .Include(c => c.Reviews).ThenInclude(r=> r.User)
                 .FirstOrDefault(c => c.CompanyID == companyid);
-            var testobject = company.Reviews.Any(r => r.User.UserID == userid);
-            if (testobject)
+            var reviewed = company.Reviews.Any(r => r.User.UserID == userid);
+            if (reviewed)
             {
                 return true;
             } else
             {
                 return false;
             }
+
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("checkifcompanyrevieweduser/{companyid}/{userid}")]
+        public Boolean checkIfCompanyReviewedUser(long companyid, long userid)
+        {
+
+            Company company = _context.Companies.Find(companyid);
+            User user = _context.Users
+                .Include(u => u.Reviews).ThenInclude(r => r.Company)
+                .FirstOrDefault(u => u.UserID == userid);
+            var reviewed = user.Reviews.Any(r => r.Company.CompanyID == companyid);
+            if (reviewed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+
         }
 
         // GET: api/Review/5
