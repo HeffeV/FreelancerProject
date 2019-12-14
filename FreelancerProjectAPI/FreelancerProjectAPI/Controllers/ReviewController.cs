@@ -22,12 +22,14 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // GET: api/Review
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
         {
-            return await _context.Reviews.ToListAsync();
+            return await _context.Reviews.Include(r=>r.User).Include(r=>r.Company).ToListAsync();
         }
 
+        [Authorize]
         [HttpGet]
         [Route("checkifuserreviewedcompany/{companyid}")]
         public Boolean checkIfUserReviewedCompany(long companyid)
@@ -92,12 +94,13 @@ namespace FreelancerProjectAPI.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPost]
         [Route("addreviewtocompany")]
         public ActionResult<Review> PostReview(Review review)
         {
-            //var userid = long.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
-            long userid = 1;
+            var userid = long.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
+            //long userid = 1;
             User user = _context.Users.Find(userid);
             var company = _context.Companies.FirstOrDefault(c => c.CompanyID == review.Company.CompanyID);
             review.User = user;
