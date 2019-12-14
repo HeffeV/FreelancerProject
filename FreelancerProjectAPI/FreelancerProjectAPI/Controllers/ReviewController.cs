@@ -65,33 +65,31 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // PUT: api/Review/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(long id, Review review)
+        [HttpPut]
+        public async Task<IActionResult> PutReview(Review review)
         {
-            if (id != review.ReviewID)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(review).State = EntityState.Modified;
-
-            try
+            if (review != null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ReviewExists(id))
+                Review tmpReview = _context.Reviews.Find(review.ReviewID);
+                if (tmpReview != null)
                 {
-                    return NotFound();
+                    tmpReview.Title = review.Title;
+                    tmpReview.Description = review.Description;
+
+                    _context.Entry(review).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return Ok();
                 }
                 else
                 {
-                    throw;
+                    return NotFound();
                 }
             }
-
-            return NoContent();
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [Authorize]
@@ -125,7 +123,7 @@ namespace FreelancerProjectAPI.Controllers
             _context.Reviews.Remove(review);
             await _context.SaveChangesAsync();
 
-            return review;
+            return Ok();
         }
 
         private bool ReviewExists(long id)
