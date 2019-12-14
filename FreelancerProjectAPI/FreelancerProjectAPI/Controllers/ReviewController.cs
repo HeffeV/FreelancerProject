@@ -111,6 +111,7 @@ namespace FreelancerProjectAPI.Controllers
         }
 
         // DELETE: api/Review/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Review>> DeleteReview(long id)
         {
@@ -124,6 +125,30 @@ namespace FreelancerProjectAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("filterReviews")]
+        public async Task<ActionResult<IEnumerable<Review>>> FilterReviews(FilterReviewModel filterModel)
+        {
+            List<Review> reviews = await _context.Reviews.Include(e => e.User).Include(e => e.Company).ToListAsync();
+
+            if(filterModel.Title!=null && filterModel.Title != "" && filterModel.Title != " ")
+            {
+                reviews = reviews.Where(r => r.Title.ToLower().Contains(filterModel.Title.ToLower())).ToList();
+            }
+            if (filterModel.Company != null && filterModel.Company != "" && filterModel.Company != " ")
+            {
+                reviews = reviews.Where(r => r.Company.CompanyName.ToLower().Contains(filterModel.Company.ToLower())).ToList();
+            }
+            if (filterModel.Username != null && filterModel.Username != "" && filterModel.Username != " ")
+            {
+                reviews = reviews.Where(r => r.User.Username.ToLower().Contains(filterModel.Username.ToLower())).ToList();
+            }
+
+            reviews = reviews.Where(r => r.UserReview == filterModel.UserReview).ToList();
+            return reviews;
         }
 
         private bool ReviewExists(long id)
