@@ -259,7 +259,7 @@ namespace FreelancerProjectAPI.Controllers
             return Ok();
         }
 
-        public string CreatePassword(int length)
+        private string CreatePassword(int length)
         {
             const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             StringBuilder res = new StringBuilder();
