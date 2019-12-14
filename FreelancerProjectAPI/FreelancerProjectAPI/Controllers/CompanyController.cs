@@ -207,6 +207,7 @@ namespace FreelancerProjectAPI.Controllers
             return companies;
         }
 
+
 		[HttpGet("CheckIfOwnCompany")]
 		public Boolean CheckIfOwnCompany(int companyID, int userID)
 		{
