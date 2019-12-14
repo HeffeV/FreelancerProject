@@ -125,6 +125,22 @@ namespace FreelancerProjectAPI.Controllers
             return review;
         }
 
+        // GET: api/Review
+        [HttpGet("UserReviews")]
+        public async Task<ActionResult<IEnumerable<Review>>> GetUserReviews()
+        {
+
+            return await _context.Reviews.Include(e=>e.Company).Include(e=>e.User).Where(e=>e.UserReview==true).ToListAsync();
+        }
+
+        // GET: api/Review
+        [HttpGet("companyReviews")]
+        public async Task<ActionResult<IEnumerable<Review>>> GetCompanyReviews()
+        {
+
+            return await _context.Reviews.Include(e => e.Company).Include(e => e.User).Where(e => e.UserReview == false).ToListAsync();
+        }
+
         private bool ReviewExists(long id)
         {
             return _context.Reviews.Any(e => e.ReviewID == id);
