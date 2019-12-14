@@ -1,7 +1,11 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
+<<<<<<< HEAD
     "signature": ""
+=======
+    "signature": "ddd03072e7405c0f27dd7424e3ebed562bce7ab5"
+>>>>>>> pass reset
   },
   "compilationOptions": {
     "defines": [

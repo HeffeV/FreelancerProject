@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using FreelancerProjectAPI.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Mail;
+using System.Net;
+using System.Text;
 
 namespace FreelancerProjectAPI.Controllers
 {
@@ -109,6 +112,8 @@ namespace FreelancerProjectAPI.Controllers
             tmpUser.LastName = user.LastName;
             tmpUser.Name = user.Name;
             tmpUser.Username = user.Username;
+            tmpUser.Password = user.Password;
+            tmpUser.Image = user.Image;
 
             foreach (TagUser tc in user.TagUsers)
             {
@@ -206,6 +211,64 @@ namespace FreelancerProjectAPI.Controllers
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+        // PUT: api/User/resetPassword/email
+        [HttpPut("resetPassword/{email}")]
+        public async Task<IActionResult> ResetPassword(string email)
+        {
+            User user = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            //random pass
+            user.Password = CreatePassword(15);
+
+            //mail
+            MailAddress to = new MailAddress(user.Email);
+            MailAddress from = new MailAddress("no_reply@subplementum.com");
+
+            MailMessage message = new MailMessage(from, to);
+
+            SmtpClient client = new SmtpClient("smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("e858272f0a8ade", "e07e9c741f59a8"),
+                EnableSsl = true
+            };
+
+            message.Subject = "Password reset";
+            message.Body = "<html><head><link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'></head><body><p>New password: "+user.Password+"</p><button type='button' class='btn btn-primary'>Login</button></body></html>";
+
+            message.IsBodyHtml = true;
+
+            try
+            {
+                client.Send(message);
+            }
+            catch (SmtpException ex)
+            {
+                return BadRequest(ex);
+            }
+
+            //update
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        public string CreatePassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
         }
     }
 }
