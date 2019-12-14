@@ -125,14 +125,19 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		// GET: api/Assignment/PossibleStatus
 		[HttpGet("PossibleStatus")]
+		//returns list of Status-objects
 		public async Task<ActionResult<IEnumerable<Status>>> GetStatusses()
 		{
 			return await _context.Status.ToListAsync();
 		}
 
 		[Authorize]
+		// PUT: api/Assignment/PublishAssignment?id=1
 		[HttpPut("PublishAssignment")]
+		//set status of assignment to Open -> users can apply now
+		//returns Assignment-object - with status Open
 		public async Task<ActionResult<Assignment>> PublishAssignment(long id)
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
@@ -147,7 +152,10 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		// PUT: api/Assignment/closeAssignment?id=1
 		[HttpPut("closeAssignment")]
+		//set status of assignment to Closed -> users can't apply anymore
+		//returns Assignment-object - with status Closed
 		public async Task<ActionResult<Assignment>> CloseAssignment(long id)
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
@@ -162,7 +170,10 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		// PUT: api/Assignment/FinishAssignment?id=1
 		[HttpPut("FinishAssignment")]
+		//set status of assignment to Finished -> 1 user is selected for this assignment
+		//returns Assignment-object - with status Finished
 		public async Task<ActionResult<Assignment>> FinishAssignment(long id)
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == id);
@@ -177,6 +188,7 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[HttpGet]
+		// GET: api/Assignment/getRandoms
 		[Route("getRandoms")]
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetRandomAssignments()
 		{
@@ -199,7 +211,11 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		//GET: api/Assignment/byUserID?userID=1
 		[HttpGet("byUserID")]
+		//returns all assignments that belong to a user
+		//user can have multiple companies so all assignments of all their companies are shown
+		//returns list of Assignment-objects
 		public List<Assignment> GetAssignmentsByUserID(int userID)
 		{
 			var userAssignments = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).Where(ua => ua.User.UserID == userID);
@@ -216,6 +232,7 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[HttpPost("filterAssignments")]
+		//POST: api/Assignment/filterAssignments
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetFilteredAssignments(FilterModel filterModel)
 		{
 
@@ -256,17 +273,23 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		//GET: api/Assignment/requestedAssignmentByUserID?userID=1
 		[HttpGet("requestedAssignmentByUserID")]
+		//returns assignments that the user has applied for
+		//assignment status is still open  and user hasnt beent selected (yet) for this assignment
+		//returns list of Assignment-objects
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetRequestedAssignmentsByUserID(int userID)
 		{
 			List<Assignment> assignmentsByUser = GetAssignmentsByUserID(userID);
 			List<Assignment> assignments = new List<Assignment>();
 			foreach (var assignment in assignmentsByUser)
 			{
-				if (assignment.Status.StatusID == 4)
+				//status is still open
+				if (assignment.Status.CurrentStatus == "Open")
 				{
 					foreach (var ua in assignment.UserAssignments)
 					{
+						//user hasn't been accepted (yet)
 						if (ua.User.UserID == userID && ua.Accepted == false)
 						{
 							var found = _context.Assignments.FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID);
@@ -282,17 +305,22 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		//GET: api/Assignment/inProgressAssignmentByUserID?userID=1
 		[HttpGet("inProgressAssignmentByUserID")]
+		//returns assignments that the user has applied for and thi user is selected for this assignment
+		//returns list of Assignment-objects
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetInProgresAssignmentsByUserID(int userID)
 		{
 			List<Assignment> assignmentsByUser = GetAssignmentsByUserID(userID);
 			List<Assignment> assignments = new List<Assignment>();
 			foreach (var assignment in assignmentsByUser)
 			{
-				if (assignment.Status.StatusID == 3)
+				//status is closed (others can't apply anymore)
+				if (assignment.Status.CurrentStatus == "Closed")
 				{
 					foreach (var ua in assignment.UserAssignments)
 					{
+						//user has been accepted for this assignment
 						if (ua.User.UserID == userID && ua.Accepted == true)
 						{
 							var found = _context.Assignments.FirstOrDefault(a => a.AssignmentID == assignment.AssignmentID);
@@ -308,14 +336,18 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		//GET: api/Assignment/finishedAssignmentByUserID?userID=1
 		[HttpGet("finishedAssignmentByUserID")]
+		//returns assignments that the user has finished
+		//returns list of Assignment-objects
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetFinishedAssignmentsByUserID(int userID)
 		{
 			List<Assignment> assignmentsByUser = GetAssignmentsByUserID(userID);
 			List<Assignment> assignments = new List<Assignment>();
 			foreach (var assignment in assignmentsByUser)
 			{
-				if (assignment.Status.StatusID == 2)
+				//status is finished so this assignment is done
+				if (assignment.Status.CurrentStatus == "Finished")
 				{
 					foreach (var ua in assignment.UserAssignments)
 					{
@@ -334,6 +366,7 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 
+		//GET: api/Assignment/byCompany? userID = 1
 		[HttpGet("byCompany")]
 		public List<Assignment> GetAssignmentsByCompany(int userID)
 		{
@@ -356,7 +389,11 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		//POST: api/Assignment/ApplyForAssignment?assignmentID=0&userID=0
 		[HttpPost("ApplyForAssignment")]
+		//user applies for an assignment
+		//userAssignment-object gets created
+		//returns OK if succesfull - BadRequest
 		public async Task<ActionResult<UserAssignment>> ApplyForAssignment(int assignmentID, int userID)
 		{
 			Assignment assignment = _context.Assignments.FirstOrDefault(a => a.AssignmentID == assignmentID);
@@ -377,7 +414,11 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		//DELETE: api/Assignment/CancelAssignment?assignmentID=0&userID=0
 		[HttpDelete("CancelAssignment")]
+		//a user cancels his 'apply' from this assignment
+		//userAssignment is deleted
+		//returns Ok
 		public async Task<ActionResult<UserAssignment>> CancelAssignment(int assignmentID, int userID)
 		{
 			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID);
@@ -388,7 +429,11 @@ namespace FreelancerProjectAPI.Controllers
 			return Ok();
 		}
 
+		//GET: api/Assignment/UserAssignment?assignmentID=0&userID=0
 		[HttpGet("UserAssignment")]
+		//returns UserAssignment-object if exists
+		//exists if user has applied for this assignment
+		//returns USerAssignment-object
 		public async Task<ActionResult<UserAssignment>> GetUserAssignment(int assignmentID, int userID)
 		{
 			var userAssignment = _context.UserAssignments.FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == userID);
@@ -400,17 +445,22 @@ namespace FreelancerProjectAPI.Controllers
 			return userAssignment;
 		}
 
+		//GET: api/Assignment/CheckIfOwnAssignment?assignmentID=0&userID=0
 		[HttpGet("CheckIfOwnAssignment")]
+		//check if assignment is owned by a company of this user
+		//returns boolean
 		public Boolean CheckIfOwnAssignment(int assignmentID, int userID)
 		{
 			var userCompanies = _context.UserCompanies.Include(uc => uc.User).Include(uc => uc.Company).Where(uc => uc.User.UserID == userID);
 			List<Company> companies = new List<Company>();
 			List<Assignment> assignments = new List<Assignment>();
 
+			//see which companies are owned by this user
 			foreach (var uc in userCompanies)
 			{
 				companies.Add(_context.Companies.Include(c => c.Assignments).FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
 			}
+			//for each company, get the assignments created by this company
 			foreach (var c in companies)
 			{
 				foreach (var assignment in c.Assignments)
@@ -426,18 +476,28 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
+		//PUT: api/Assignment/AcceptAssignmentCandidate?assignmentID=0&candidateID=0
 		[HttpPut("AcceptAssignmentCandidate")]
+		//accept a candidate for an assignments 
+		//UserAssignment-object property Accepted is set to true
+		// Status of this assignment becomes 'Closed'
+		//the other candidates - UserAssignment-objects are deleted
+		//returns ok
 		public async Task<IActionResult> AcceptAssignmentCandidate(int assignmentID, int candidateID)
 		{
+			//get UserAssignment-object of this assignment and the user
 			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == candidateID);
-
+			
+			//set Accepted to true - this user can do the assignment
 			userAssignment.Accepted = true;
 			_context.Entry(userAssignment).State = EntityState.Modified;
 
+			//assignment-status is set to Closed
 			Assignment assignment = _context.Assignments.Include(a => a.Status).FirstOrDefault(a => a.AssignmentID == assignmentID);
 			assignment.Status = _context.Status.FirstOrDefault(s => s.CurrentStatus == "Closed");
 			_context.Entry(userAssignment).State = EntityState.Modified;
 
+			// delete the userAssignment-object from the other candidates
 			List<UserAssignment> userAssignments = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).Where(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID != candidateID).ToList();
 			foreach (var u in userAssignments)
 			{
@@ -449,7 +509,11 @@ namespace FreelancerProjectAPI.Controllers
 
 		}
 		[Authorize]
+		//PUT: api/Assignment/DeclineAssignmentCandidate?assignmentID=0&candidateID=0
 		[HttpPut("DeclineAssignmentCandidate")]
+		//a company declines this user for the assignment
+		//UserAssignment gets deleted
+		//returns ok
 		public async Task<IActionResult> DeclineAssignmentCandidate(int assignmentID, int candidateID)
 		{
 			UserAssignment userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Include(ua => ua.User).FirstOrDefault(ua => ua.Assignment.AssignmentID == assignmentID && ua.User.UserID == candidateID);
