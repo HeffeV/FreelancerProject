@@ -149,7 +149,9 @@ namespace FreelancerProjectAPI.Controllers
                 .Include(c => c.UserCompanies)
                 .Include(c=>c.TagCompanies)
                 .FirstOrDefaultAsync(c => c.CompanyID == id);
-            var userCompanies = company.UserCompanies.Where(uc => uc.UserCompanyID == company.CompanyID);
+            List<UserCompany> userCompanies = new List<UserCompany>();
+            userCompanies = _context.UserCompanies.Include(uc => uc.Company)
+                                                  .Where(uc => uc.Company.CompanyID == id).ToList();
 
             if (company == null)
             {
