@@ -140,27 +140,51 @@ namespace FreelancerProjectAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Company>> DeleteCompany(long id)
         {
-            var company = await _context.Companies
+            Company company = await _context.Companies
                 .Include(c => c.Assignments).ThenInclude(a=>a.UserAssignments)
                 .Include(c => c.Assignments).ThenInclude(a => a.TagAssignments)
+                .Include(c => c.Assignments).ThenInclude(a => a.Location)
                 .Include(c => c.ContactInfo)
                 .Include(c => c.Location)
                 .Include(c => c.Reviews)
                 .Include(c => c.UserCompanies)
                 .Include(c=>c.TagCompanies)
                 .FirstOrDefaultAsync(c => c.CompanyID == id);
-            List<UserCompany> userCompanies = new List<UserCompany>();
-            userCompanies = _context.UserCompanies.Include(uc => uc.Company)
-                                                  .Where(uc => uc.Company.CompanyID == id).ToList();
 
-            if (company == null)
-            {
-                return NotFound();
-            }
 
-            foreach(UserCompany userCompany in userCompanies)
+            foreach(UserCompany userCompany in company.UserCompanies)
             {
                 _context.UserCompanies.Remove(userCompany);
+            }
+
+            foreach (TagCompany tagCompany in company.TagCompanies)
+            {
+                _context.TagCompanies.Remove(tagCompany);
+            }
+
+            foreach (Review review in company.Reviews)
+            {
+                _context.Reviews.Remove(review);
+            }
+
+            _context.ContactInfos.Remove(company.ContactInfo);
+            _context.Locations.Remove(company.Location);
+
+            foreach(Assignment assignment in company.Assignments)
+            {
+                foreach (TagAssignment tagAssignment in assignment.TagAssignments)
+                {
+                    _context.TagAssignments.Remove(tagAssignment);
+                }
+
+                foreach (UserAssignment userAssignment in assignment.UserAssignments)
+                {
+                    _context.UserAssignments.Remove(userAssignment);
+                }
+
+                _context.Locations.Remove(assignment.Location);
+
+                _context.Assignments.Remove(assignment);
             }
 
             _context.Companies.Remove(company);
