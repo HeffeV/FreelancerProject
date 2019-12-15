@@ -48,6 +48,7 @@ namespace FreelancerProjectAPI.Controllers
                 .Include(u => u.UserAssignments)
                     .ThenInclude(ua => ua.Assignment)
                         .ThenInclude(a => a.Status)
+                .Include(u => u.UserAssignments).ThenInclude(ua => ua.User)
                 .Include(u => u.Location)
                 .FirstOrDefaultAsync(u => u.UserID == id);
 
