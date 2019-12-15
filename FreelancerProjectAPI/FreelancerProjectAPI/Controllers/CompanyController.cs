@@ -301,7 +301,19 @@ namespace FreelancerProjectAPI.Controllers
 			await _context.SaveChangesAsync();
 			return Ok();
 		}
-  
+		[Authorize]
+		//PUT: api/Company/DeclineInviteCompany?companyID=0&recruiterID=0
+		[HttpDelete("DeclineInviteCompany")]
+		//recruiter declines the invite to the company
+		//return OK if succesful
+		public async Task<IActionResult> DeclineInviteToCompany(int companyID, int recruiterID)
+		{
+			UserCompany userCompany = _context.UserCompanies.Include(uc => uc.Company).Include(uc => uc.User).FirstOrDefault(uc => uc.Company.CompanyID == companyID && uc.User.UserID == recruiterID);
+			_context.UserCompanies.Remove(userCompany);
+			await _context.SaveChangesAsync();
+			return Ok();
+		}
+
 		[Authorize]
 		//DELETE:  api/Company/LeaveCompany?companyID=0&recruiterID=0
 		[HttpDelete("LeaveCompany")]
@@ -311,7 +323,6 @@ namespace FreelancerProjectAPI.Controllers
 		public async Task<IActionResult> LeaveCompany(int companyID, int recruiterID)
 		{
 			
-
 			List<UserCompany> userCompanies = _context.UserCompanies.Include(uc => uc.Company).Include(uc => uc.User).ThenInclude(u => u.UserType).Where(uc => uc.Company.CompanyID == companyID && uc.User.UserType.Type == "recruiter").ToList();
 
 			if (userCompanies.Count == 1)
