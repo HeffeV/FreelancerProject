@@ -26,7 +26,6 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Skill>>> GetSkillsNotFromUser(long id)
         {
-            //var skills = await _context.Skills.ToListAsync();
             var skills = await _context.Skills.ToListAsync();
 
             List<Skill> rSkills = new List<Skill>();
@@ -34,7 +33,7 @@ namespace FreelancerProjectAPI.Controllers
 
             foreach(Skill s in skills)
             {
-                var userSkill = await _context.UserSkills.Where(us => us.Skill.SkillID == s.SkillID && us.User.UserID!=id).FirstOrDefaultAsync();
+                var userSkill = await _context.UserSkills.Include(us => us.Skill).Where(us => us.Skill.SkillID == s.SkillID).FirstOrDefaultAsync();
 
                 if(userSkill != null)
                 {
