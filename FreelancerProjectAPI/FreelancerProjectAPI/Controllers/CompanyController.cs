@@ -484,7 +484,7 @@ namespace FreelancerProjectAPI.Controllers
 
 				if (recruiter.UserType.Type == "recruiter")
 				{
-					UserCompany userCompany = new UserCompany();
+					UserCompany userCompany = new UserCompany(); 
 					userCompany.User = recruiter;
 					userCompany.Company = company;
 					userCompany.Accepted = false;
