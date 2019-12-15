@@ -192,6 +192,28 @@ namespace FreelancerProjectAPI.Controllers
                 return NotFound();
             }
 
+            foreach(UserSkill userSkill in user.UserSkills)
+            {
+                _context.UserSkills.Remove(userSkill);
+            }
+
+            foreach(TagUser tagUser in user.TagUsers)
+            {
+                _context.TagUsers.Remove(tagUser);
+            }
+
+            foreach(UserCompany userCompany in user.UserCompanies)
+            {
+                _context.UserCompanies.Remove(userCompany);
+            }
+
+            foreach(UserAssignment userAssignment in user.UserAssignments)
+            {
+                _context.UserAssignments.Remove(userAssignment);
+            }
+
+            _context.ContactInfos.Remove(user.ContactInfo);
+            _context.Locations.Remove(user.Location);
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
