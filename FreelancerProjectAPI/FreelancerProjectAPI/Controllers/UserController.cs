@@ -212,6 +212,11 @@ namespace FreelancerProjectAPI.Controllers
                 _context.UserAssignments.Remove(userAssignment);
             }
 
+            foreach(Review review in user.Reviews)
+            {
+                _context.Reviews.Remove(review);
+            }
+
             _context.ContactInfos.Remove(user.ContactInfo);
             _context.Locations.Remove(user.Location);
             _context.Users.Remove(user);
