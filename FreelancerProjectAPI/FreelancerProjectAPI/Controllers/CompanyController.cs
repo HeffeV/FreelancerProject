@@ -178,7 +178,7 @@ namespace FreelancerProjectAPI.Controllers
         [HttpGet("ByUser")]
         public ActionResult<IEnumerable<Company>> FindCompanyByUser(int userID)
         {
-            var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID);
+            var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID && u.Accepted == true) ;
             List<Company> companies = new List<Company>();
             foreach (var uc in usercompanies)
             {
