@@ -10,5 +10,6 @@ namespace FreelancerProjectAPI.Models
         public long UserCompanyID { get; set; }
         public Company Company { get; set; }
         public User User { get; set; }
-    }
+		public bool Accepted { get; set; }
+	}
 }

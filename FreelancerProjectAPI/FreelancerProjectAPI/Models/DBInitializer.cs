@@ -338,10 +338,11 @@ namespace FreelancerProjectAPI.Models
 
             };
 
-            UserCompany recruiterCompany = new UserCompany()
-            {
-                User = recruiter,
-                Company = company
+			UserCompany recruiterCompany = new UserCompany()
+			{
+				User = recruiter,
+				Company = company,
+				Accepted = true
             };
 
             company.Reviews = new List<Review>()
