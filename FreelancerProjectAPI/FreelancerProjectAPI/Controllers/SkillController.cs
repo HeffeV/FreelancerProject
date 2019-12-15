@@ -34,9 +34,9 @@ namespace FreelancerProjectAPI.Controllers
 
             foreach(Skill s in skills)
             {
-                var userSkill = await _context.UserSkills.Where(us => us.Skill.SkillID == s.SkillID).FirstOrDefaultAsync();
+                var userSkill = await _context.UserSkills.Where(us => us.Skill.SkillID == s.SkillID && us.User.UserID!=id).FirstOrDefaultAsync();
 
-                if(userSkill == null)
+                if(userSkill != null)
                 {
                     rSkills.Add(s);
                 }
