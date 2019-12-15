@@ -261,29 +261,38 @@ namespace FreelancerProjectAPI.Controllers
 		}
 
 		[Authorize]
-		//POST: api/Company/InviteRecruiter?companyID=0&recruiterID=0
+		//POST: api/Company/InviteRecruiter?companyID=0&recruiterEmail=0
 		[HttpPost("InviteRecruiter")]
 		//invite a recuiter to a company
 		//return OK if succesful
-		public async Task<IActionResult> InviteRecruiterToCompany(int companyID, int recruiterID)
+		public async Task<IActionResult> InviteRecruiterToCompany(int companyID, string recruiterEmail)
 		{
-			Company company = _context.Companies.Include(c => c.UserCompanies).FirstOrDefault(c => c.CompanyID == companyID);
-			User recruiter = _context.Users.Include(u => u.UserType).FirstOrDefault(u => u.UserID == recruiterID);
 
-			if (recruiter.UserType.Type == "recruiter")
+			User user = _context.Users.FirstOrDefault(u => u.Email == recruiterEmail);
+			if (user == null)
 			{
-				UserCompany userCompany = new UserCompany();
-				userCompany.User = recruiter;
-				userCompany.Company = company;
-				userCompany.Accepted = false;
-
-				_context.UserCompanies.Add(userCompany);
-				await _context.SaveChangesAsync();
-				return Ok();
+				return NotFound();
 			}
 			else
 			{
-				return BadRequest();
+				User recruiter = _context.Users.Include(u => u.UserType).FirstOrDefault(u => u.Email == recruiterEmail);
+				Company company = _context.Companies.Include(c => c.UserCompanies).FirstOrDefault(c => c.CompanyID == companyID);
+
+				if (recruiter.UserType.Type == "recruiter")
+				{
+					UserCompany userCompany = new UserCompany();
+					userCompany.User = recruiter;
+					userCompany.Company = company;
+					userCompany.Accepted = false;
+
+					_context.UserCompanies.Add(userCompany);
+					await _context.SaveChangesAsync();
+					return Ok();
+				}
+				else
+				{
+					return BadRequest();
+				}
 			}
 		}
 
@@ -323,15 +332,16 @@ namespace FreelancerProjectAPI.Controllers
 		//return OK if succesful
 		public async Task<IActionResult> LeaveCompany(int companyID, int recruiterID)
 		{
-			
+
 			List<UserCompany> userCompanies = _context.UserCompanies.Include(uc => uc.Company).Include(uc => uc.User).ThenInclude(u => u.UserType).Where(uc => uc.Company.CompanyID == companyID && uc.User.UserType.Type == "recruiter").ToList();
 
 			if (userCompanies.Count == 1)
 			{
 				Company company = _context.Companies.Include(c => c.UserCompanies).FirstOrDefault(c => c.CompanyID == companyID);
-				_context.Companies.Remove(company);
+				DeleteCompany(company.CompanyID);
 			}
-			else {
+			else
+			{
 				UserCompany userCompany = _context.UserCompanies.Include(uc => uc.Company).Include(uc => uc.User).FirstOrDefault(uc => uc.Company.CompanyID == companyID && uc.User.UserID == recruiterID);
 				_context.UserCompanies.Remove(userCompany);
 			}
