@@ -552,7 +552,7 @@ namespace FreelancerProjectAPI.Controllers
             return allAssignments;
         }
 
-		//GET: api/Assignment/CheckIfOwnAssignment?assignmentID=0
+		//GET: api/Assignment/CheckIfCandidateIsAccepted?assignmentID=2
 		[HttpGet("CheckIfCandidateIsAccepted")]
 		//check if there is a user that has been accepted for this assignment
 		//returns boolean
