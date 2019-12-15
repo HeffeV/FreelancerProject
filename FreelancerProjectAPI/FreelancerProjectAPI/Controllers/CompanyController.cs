@@ -121,7 +121,8 @@ namespace FreelancerProjectAPI.Controllers
             UserCompany com = new UserCompany()
             {
                 Company = company,
-                User = user
+                User = user,
+                Accepted = true,
             };
 
             company.UserCompanies = new List<UserCompany>();
