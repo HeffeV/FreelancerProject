@@ -113,6 +113,18 @@ namespace FreelancerProjectAPI.Controllers
 				return NotFound();
 			}
 
+            foreach(TagAssignment tagAssignment in assignment.TagAssignments)
+            {
+                _context.TagAssignments.Remove(tagAssignment);
+            }
+
+            foreach(UserAssignment userAssignment in assignment.UserAssignments)
+            {
+                _context.UserAssignments.Remove(userAssignment);
+            }
+
+            _context.Locations.Remove(assignment.Location);
+
 			_context.Assignments.Remove(assignment);
 			await _context.SaveChangesAsync();
 
