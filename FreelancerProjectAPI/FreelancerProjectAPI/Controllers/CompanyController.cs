@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FreelancerProjectAPI.Controllers
 {
+<<<<<<< HEAD
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CompanyController : ControllerBase
@@ -207,6 +208,209 @@ namespace FreelancerProjectAPI.Controllers
 
 			return companies;
 		}
+=======
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CompanyController : ControllerBase
+    {
+        private readonly DatabaseContext _context;
+
+        public CompanyController(DatabaseContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/Company
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
+        {
+            return await _context.Companies.ToListAsync();
+        }
+
+        // GET: api/Company/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Company>> GetCompany(long id)
+        {
+            var company = await _context.Companies
+                .Include(c => c.Assignments).ThenInclude(a => a.TagAssignments).ThenInclude(a => a.Tag)
+                .Include(c => c.ContactInfo)
+                .Include(c => c.Location)
+                .Include(c => c.Reviews).ThenInclude(c=>c.User)
+                .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
+                .Include(c => c.TagCompanies).ThenInclude(tc => tc.Tag)
+                .FirstOrDefaultAsync(c => c.CompanyID == id);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return company;
+        }
+
+        [Authorize]
+        [HttpPut("updateimage")]
+        public async Task<IActionResult> PutImage(Company company)
+        {
+
+            _context.Entry(company).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        // PUT: api/Company/5
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> PutCompany(Company company)
+        {
+
+            Company tmpCompany;
+
+            tmpCompany = await _context.Companies
+                .Include(c => c.Assignments)
+                .Include(c => c.ContactInfo)
+                .Include(c => c.Location)
+                .Include(c => c.Reviews)
+                .Include(c => c.UserCompanies).ThenInclude(uc => uc.User)
+                .Include(c => c.TagCompanies).ThenInclude(tc => tc.Tag).FirstOrDefaultAsync(c => c.CompanyID == company.CompanyID);
+            tmpCompany.CompanyName = company.CompanyName;
+            tmpCompany.Location.Country = company.Location.Country;
+            tmpCompany.Location.Address = company.Location.Address;
+            tmpCompany.Location.Postcode = company.Location.Postcode;
+            tmpCompany.About = company.About;
+            tmpCompany.ContactInfo.LinkedIn = company.ContactInfo.LinkedIn;
+            tmpCompany.ContactInfo.MobileNumber = company.ContactInfo.MobileNumber;
+
+
+            foreach (TagCompany tc in company.TagCompanies)
+            {
+                TagCompany tmpTagCompany = _context.TagCompanies.Include(t => t.Tag).SingleOrDefault(t => t.Tag.TagName == tc.Tag.TagName && t.TagCompanyID == tc.TagCompanyID);
+                if (tmpTagCompany == null || tmpTagCompany.Equals(null))
+                {
+                    //tag is nog niet toegevoegd aan assignment
+                    Tag tmpTag = _context.Tags.SingleOrDefault(t => t.TagName == tc.Tag.TagName);
+                    if (tmpTag == null || tmpTag.Equals(null))
+                    {
+                        //tag bestaat niet
+                        tmpCompany.TagCompanies.Add(new TagCompany() { Tag = new Tag() { TagName = tc.Tag.TagName }, Company = tmpCompany });
+                    }
+                    else
+                    {
+                        //tag bestaat niet
+                        tmpCompany.TagCompanies.Add(new TagCompany() { Tag = tmpTag, Company = tmpCompany });
+                    }
+                }
+            }
+
+            _context.Entry(tmpCompany).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return Ok();
+
+        }
+
+        // POST: api/Company
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<Company>> PostCompany(Company company)
+        {
+            var userid = long.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
+            User user = _context.Users.Find(userid);
+
+            UserCompany com = new UserCompany()
+            {
+                Company = company,
+                User = user
+            };
+
+            company.UserCompanies = new List<UserCompany>();
+            company.UserCompanies.Add(com);
+
+
+            _context.Companies.Add(company);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetCompany", new { id = company.CompanyID }, company);
+        }
+
+        // DELETE: api/Company/5
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Company>> DeleteCompany(long id)
+        {
+            var company = await _context.Companies
+                .Include(c => c.Assignments).ThenInclude(a=>a.UserAssignments)
+                .Include(c => c.Assignments).ThenInclude(a => a.TagAssignments)
+                .Include(c => c.ContactInfo)
+                .Include(c => c.Location)
+                .Include(c => c.Reviews)
+                .Include(c => c.UserCompanies)
+                .Include(c=>c.TagCompanies)
+                .FirstOrDefaultAsync(c => c.CompanyID == id);
+            var userCompanies = company.UserCompanies.Where(uc => uc.UserCompanyID == company.CompanyID);
+
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            foreach(UserCompany userCompany in userCompanies)
+            {
+                _context.UserCompanies.Remove(userCompany);
+            }
+
+            _context.Companies.Remove(company);
+            await _context.SaveChangesAsync();
+
+            return company;
+        }
+
+        private bool CompanyExists(long id)
+        {
+            return _context.Companies.Any(e => e.CompanyID == id);
+        }
+
+        [Authorize]
+        [HttpGet("ByUser")]
+        public ActionResult<IEnumerable<Company>> FindCompanyByUser(int userID)
+        {
+            var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID);
+            List<Company> companies = new List<Company>();
+            foreach (var uc in usercompanies)
+            {
+                var found = _context.Companies.FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID);
+                if (found != null)
+                {
+                    companies.Add(_context.Companies.Include(c => c.Assignments).ThenInclude(a => a.Status).Include(c => c.Assignments).ThenInclude(a => a.UserAssignments).ThenInclude(u => u.User).FirstOrDefault(c => c.CompanyID == uc.Company.CompanyID));
+                }
+            }
+            return companies;
+
+        }
+
+
+        [HttpGet]
+        [Route("getRandoms")]
+        public async Task<ActionResult<IEnumerable<Company>>> GetRandomCompanies()
+        {
+            var allCompanies = await _context.Companies.Include(a => a.TagCompanies).ThenInclude(a => a.Tag).ToListAsync();
+            List<Company> companies = new List<Company>();
+            Random r = new Random();
+            if (allCompanies.Count > 0)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    companies.Add(allCompanies[r.Next(0, allCompanies.Count)]);
+                }
+            }
+            else
+            {
+                NotFound();
+            }
+
+            return companies;
+        }
+>>>>>>> deletecompany verandert
 
 
 		[HttpGet("CheckIfOwnCompany")]
