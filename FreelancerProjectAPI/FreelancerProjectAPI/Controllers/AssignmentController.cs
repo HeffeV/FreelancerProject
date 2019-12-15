@@ -551,5 +551,25 @@ namespace FreelancerProjectAPI.Controllers
 
             return allAssignments;
         }
-    }
+
+		//GET: api/Assignment/CheckIfOwnAssignment?assignmentID=0
+		[HttpGet("CheckIfCandidateIsAccepted")]
+		//check if there is a user that has been accepted for this assignment
+		//returns boolean
+		public Boolean CheckIfCandidateIsAccepted(int assignmentID)
+		{
+			Assignment assignment = _context.Assignments.Include(a => a.UserAssignments).FirstOrDefault(a => a.AssignmentID == assignmentID);
+
+			foreach (var ua in assignment.UserAssignments)
+			{
+				if (ua.Accepted == true)
+				{
+					return true;
+				}
+			}
+
+			return false;
+
+		}
+	}
 }
