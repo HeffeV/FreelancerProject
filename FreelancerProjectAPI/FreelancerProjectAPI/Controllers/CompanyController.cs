@@ -170,7 +170,7 @@ namespace FreelancerProjectAPI.Controllers
 		[HttpGet("ByUser")]
 		public ActionResult<IEnumerable<Company>> FindCompanyByUser(int userID)
 		{
-			var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID);
+			var usercompanies = _context.UserCompanies.Include(u => u.Company).Where(u => u.User.UserID == userID && u.Accepted == true);
 			List<Company> companies = new List<Company>();
 			foreach (var uc in usercompanies)
 			{
@@ -211,7 +211,7 @@ namespace FreelancerProjectAPI.Controllers
 		[HttpGet("CheckIfOwnCompany")]
 		public Boolean CheckIfOwnCompany(int companyID, int userID)
 		{
-			var userCompanies = _context.UserCompanies.Include(uc => uc.User).Include(uc => uc.Company).Where(uc => uc.User.UserID == userID);
+			var userCompanies = _context.UserCompanies.Include(uc => uc.User).Include(uc => uc.Company).Where(uc => uc.User.UserID == userID && uc.Accepted == true);
 			List<Company> companies = new List<Company>();
 			List<Assignment> assignments = new List<Assignment>();
 
@@ -326,6 +326,16 @@ namespace FreelancerProjectAPI.Controllers
 
 			await _context.SaveChangesAsync();
 			return Ok();
+		}
+
+		[Authorize]
+		//GET:  api/Company/GetCompanyInvites?userID=0
+		[HttpGet("GetCompanyInvites")]
+		//returns list of invites from companies tot this user
+		public async Task<ActionResult<IEnumerable<UserCompany>>> GetCompanyInvites(int userID)
+		{
+			List<UserCompany> invites = await _context.UserCompanies.Include(uc => uc.Company).Include(uc => uc.User).Where(uc => uc.User.UserID == userID && uc.Accepted == false).ToListAsync();
+			return invites;
 		}
 
 	}
