@@ -242,13 +242,21 @@ namespace FreelancerProjectAPI.Controllers
         public async Task<ActionResult<IEnumerable<Company>>> GetRandomCompanies()
         {
             var allCompanies = await _context.Companies.Include(a => a.TagCompanies).ThenInclude(a => a.Tag).ToListAsync();
+            if (allCompanies.Count <= 3)
+            {
+                return allCompanies;
+            }
             List<Company> companies = new List<Company>();
             Random r = new Random();
             if (allCompanies.Count > 0)
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; companies.Count < 3; i++)
                 {
-                    companies.Add(allCompanies[r.Next(0, allCompanies.Count)]);
+                    Company tmpCompany = allCompanies[r.Next(0, allCompanies.Count)];
+                    if (!companies.Contains(tmpCompany))
+                    {
+                        companies.Add(tmpCompany);
+                    }
                 }
             }
             else

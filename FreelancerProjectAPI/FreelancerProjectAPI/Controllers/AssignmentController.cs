@@ -226,13 +226,21 @@ namespace FreelancerProjectAPI.Controllers
 		public async Task<ActionResult<IEnumerable<Assignment>>> GetRandomAssignments()
 		{
 			List<Assignment> allAssignments = await _context.Assignments.Include(a => a.TagAssignments).ThenInclude(a => a.Tag).Include(e => e.Status).Where(e => e.Status.StatusID == 4).ToListAsync();
+            if (allAssignments.Count <= 3)
+            {
+                return allAssignments;
+            }
 			List<Assignment> assignments = new List<Assignment>();
 			Random r = new Random();
 			if (allAssignments.Count > 0)
 			{
-				for (int i = 0; i < 3; i++)
+				for (int i = 0; assignments.Count < 3; i++)
 				{
-					assignments.Add(allAssignments[r.Next(0, allAssignments.Count)]);
+                    Assignment assignment = allAssignments[r.Next(0, allAssignments.Count)];
+                    if (!assignments.Contains(assignment))
+                    {
+                        assignments.Add(assignment);
+                    }
 				}
 			}
 			else
