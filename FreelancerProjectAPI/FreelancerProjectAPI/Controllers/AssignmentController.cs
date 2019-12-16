@@ -93,7 +93,28 @@ namespace FreelancerProjectAPI.Controllers
 			Status status = _context.Status.FirstOrDefault(s => s.StatusID == 1);
 			Location location = company.Location;
 
-			assignment.Company = company;
+
+            List<TagAssignment> tagAssignments = new List<TagAssignment>();
+
+            foreach (TagAssignment tagAssignment in assignment.TagAssignments)
+            {
+                if (_context.Tags.FirstOrDefault(t => t.TagName == tagAssignment.Tag.TagName) == null)
+                {
+                    tagAssignments.Add(tagAssignment);
+                }
+                else
+                {
+                    TagAssignment tmpTagAssignment = new TagAssignment();
+                    tmpTagAssignment.Assignment=assignment;
+                    Tag tmpTag = _context.Tags.FirstOrDefault(t => t.TagName == tagAssignment.Tag.TagName);
+                    tmpTagAssignment.Tag = tmpTag;
+                    tagAssignments.Add(tmpTagAssignment);
+                }
+            }
+
+            assignment.TagAssignments = tagAssignments;
+
+            assignment.Company = company;
 			assignment.Status = status;
 			assignment.Location = location;
 
