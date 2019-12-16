@@ -44,6 +44,7 @@ namespace FreelancerProjectAPI.Controllers
                     .ThenInclude(r => r.Company)
                 .Include(u => u.ContactInfo)
                 .Include(u => u.UserCompanies)
+                    .ThenInclude(uc => uc.Company)
                 .Include(u => u.TagUsers).ThenInclude(u => u.Tag)
                 .Include(u => u.UserAssignments)
                     .ThenInclude(ua => ua.Assignment)
