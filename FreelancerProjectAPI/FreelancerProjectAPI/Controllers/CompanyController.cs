@@ -118,6 +118,26 @@ namespace FreelancerProjectAPI.Controllers
             var userid = long.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
             User user = _context.Users.Find(userid);
 
+            List<TagCompany>tagCompanies = new List<TagCompany>();
+
+            foreach(TagCompany tagCompany in company.TagCompanies)
+            {
+                if (_context.Tags.FirstOrDefault(t => t.TagName == tagCompany.Tag.TagName) == null)
+                {
+                   tagCompanies.Add(tagCompany);
+                }
+                else
+                {
+                    TagCompany tmpTagCompany = new TagCompany();
+                    tmpTagCompany.Company = company;
+                    Tag tmpTag = _context.Tags.FirstOrDefault(t => t.TagName == tagCompany.Tag.TagName);
+                    tmpTagCompany.Tag = tmpTag;
+                    tagCompanies.Add(tmpTagCompany);
+                }
+            }
+
+            company.TagCompanies = tagCompanies;
+
             UserCompany com = new UserCompany()
             {
                 Company = company,
